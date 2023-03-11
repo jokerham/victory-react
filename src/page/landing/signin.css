@@ -1,0 +1,22 @@
+.sign-in-modal {
+    width: 500px;
+    height: 400px;
+    background-color: #ae0000AA;
+    border-radius: 25px;
+}
+.sign-in-modal > :first-child {
+    color: white;
+    font-family: 'LilitaOne';
+    font-size: 96px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.sign-in-modal > :last-child {
+    width: 500px;
+    height: 305px;
+    background-color: white;
+    opacity: 100%;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}

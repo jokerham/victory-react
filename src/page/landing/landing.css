@@ -1,0 +1,21 @@
+.landing-container {
+    background-image: url("../../../public/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+}
+
+.landing-container > div {
+    background-color: #095786AA;
+    height: 100%;
+}
+
+.logo {
+    font-family: 'LilitaOne';
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
