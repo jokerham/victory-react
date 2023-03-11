@@ -1,14 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import LandingPage from './page/landing/landing';
+import { Provider } from 'react-redux'; 
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from "react-router-dom";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import { ErrorBoundary } from './components/errorBoundary';
+import App from './app';
+import { store } from './store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+let persistor = persistStore(store);
+
 root.render(
-  <React.StrictMode>
-    <LandingPage />
-  </React.StrictMode>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <BrowserRouter>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </BrowserRouter>
+    </Provider>
+  </ErrorBoundary>
 );
 
 // If you want to start measuring performance in your app, pass a function
