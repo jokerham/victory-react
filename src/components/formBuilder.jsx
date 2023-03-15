@@ -47,62 +47,58 @@ const FormBody = (props) => {
     {class: '.memberSelecter', event: 'click', handler: memberPopupHandler},
   ]);
 
-  const FormInputs = React.memo(() => {
-    let fields = [];
-    const { values, handleChange } = formik; // Change 'value' to 'values'
-  
-    console.log(values); // Change 'value' to 'values'
-    config.formFields.forEach((formField) => {
-      let classNames = [];
-      let fieldType = formField.type
-      let readOnly = false;
-      let fieldValue = (values !== undefined && formField.id in values) ? values[formField.id] : ''; // Change 'value' to 'values'
+  const { values, handleChange } = formik;
 
-      if (formField.type === 'member') {
-        fieldType = 'text';
-        classNames.push('memberSelecter');
-        readOnly = true;
-      }
+  const fields = config.formFields.map((formField) => {
+    let classNames = [];
+    let fieldType = formField.type;
+    let readOnly = false;
+    let fieldValue = (values !== undefined && formField.id in values) ? values[formField.id] : '';
 
-      switch (fieldType) {
-        case 'text':
-          fields.push(
-            <div key={formField.id}>
-              <label htmlFor={formField.id}>{formField.label}</label>
-              <input
-                id={formField.id}
-                name={formField.id}
-                type={fieldType}
-                readOnly={readOnly}
-                className={classNames.join(' ')}
-                value={fieldValue}
-                onChange={handleChange}
-              />
-            </div>
-          )
-          break;
-        default:
-          break;
-      }
-    });
-  
-    return (
+    if (formField.type === 'member') {
+      fieldType = 'text';
+      classNames.push('memberSelecter');
+      readOnly = true;
+    }
+
+    return fieldType !== 'hidden' ? (
+      <div key={formField.id}>
+        <label htmlFor={formField.id}>{formField.label}</label>
+        <input
+          id={formField.id}
+          name={formField.id}
+          type={fieldType}
+          readOnly={readOnly}
+          className={classNames.join(' ')}
+          value={fieldValue}
+          onChange={handleChange}
+        />
+      </div>
+    ) : (
+      <input
+        id={formField.id}
+        name={formField.id}
+        type={fieldType}
+        readOnly={readOnly}
+        className={classNames.join(' ')}
+        value={fieldValue}
+        onChange={handleChange}
+      />
+    );
+  });
+
+  return (
+    <div className="form_body">
       <div className="form_body__fields">
         {fields}
       </div>
-    )
-  });
-  
-  return (
-    <div className="form_body">
-      <FormInputs />
-      <FormButtons config={config}/>
+      <FormButtons config={config} />
       {isModalOpen && (
         <MemberSelecterModal onClose={closeHandler} onSelect={selectHandler} />
       )}
     </div>
-  )
-}
+  );
+};
 
 const FormBuilder = (props) => {
   const { config } = props;
