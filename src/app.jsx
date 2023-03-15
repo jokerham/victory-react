@@ -1,15 +1,24 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate} from "react-router-dom";
 import { LandingPage } from './page/landing';
 import { Layout } from './page/layout';
 import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList } from "./page/admin/member";
 import { ErrorPage } from "./page/errorPage";
+import { useAddEventListeners } from "./utils/helpers/hookHelpers";
 import "./app.scss";
 
-const userInfo = null;
+function App() {  
+  const navigate = useNavigate();
+  const handleHyperlinkClick = (event) => {
+    const src = event.currentTarget.getAttribute('src');
+    if (src) navigate(src);
+  }
 
-function App() {
+  useAddEventListeners([
+    { class: '.hyperlink', event: 'click', handler: handleHyperlinkClick },
+  ]);
+  
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />

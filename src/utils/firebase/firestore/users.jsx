@@ -22,6 +22,23 @@ async function getUserList(approved) {
   }
 }
 
+async function getUserListByName(name) {
+  try {
+    let users = [];
+    const q = query(usersRef, orderBy('name'));
+    const s = await getDocs(q)
+    s.forEach((doc) => {
+      const user = doc.data();
+      if (user.name.includes(name)) {
+        users.push(user);
+      }
+    });
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function getUser(uid) {
   try {
     const q = query(usersRef, where('uid', '==', uid));
@@ -39,5 +56,6 @@ async function getUser(uid) {
 export { 
   addUser,
   getUserList,
+  getUserListByName,
   getUser,
 }

@@ -9,6 +9,7 @@ import {
 import {
   addUser,
   getUserList,
+  getUserListByName,
   getUser,
   getInstituteList,
 } from './firestore'
@@ -24,6 +25,7 @@ export {
   // Firestore functions
   addUser,
   getUserList,
+  getUserListByName,
   getUser,
   getInstituteList,
 }

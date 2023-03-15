@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FcInspection } from 'react-icons/fc';
 import { getInstituteList } from '../../../utils/firebase';
-import { DataTableComponent } from '../../../components/datatabeComponent';
+import { DataTableComponent } from '../../../components/datatableComponent';
 
 export default function InstituteList() {
   const [retrievedFlag, setRetrievedFlag] = useState(false);
@@ -11,8 +11,21 @@ export default function InstituteList() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (retrievedFlag == false) { retrieveData(); }
-  }, [])
+    async function retrieveData() {
+      try {
+        setRetrievedFlag(true);
+        const instituteList = await getInstituteList();
+        setInstitutes(instituteList);
+        setPending(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
+    if (retrievedFlag === false) {
+       retrieveData(); 
+    }
+  }, [retrievedFlag])
 
   const addButtonClickHandler = ((e) => {
     navigate('/institute/new');
@@ -26,16 +39,6 @@ export default function InstituteList() {
 
   });
 
-  async function retrieveData() {
-    try {
-      setRetrievedFlag(true);
-      const instituteList = await getInstituteList();
-      setInstitutes(instituteList);
-      setPending(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const columns = [
     { name: 'id', selector: row => row.id, omit: true },

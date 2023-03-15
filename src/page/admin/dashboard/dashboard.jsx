@@ -80,8 +80,9 @@ export default function Dashboard() {
       <div className="main__cards">
         <div className="card">
           <div className="card__header">
-            <div className="card__header-title text-light">Your <strong>Events</strong>
-              <a href="#" className="card__header-link text-bold">View All</a>
+            <div className="card__header-title text-light">
+              Your <strong>Events</strong>&nbsp;
+              <span className="card__header-link text-bold hyperlink">View All</span>
             </div>
             <div className="settings">
               <div className="settings__block"><i className="fas fa-edit"></i></div>
@@ -148,8 +149,9 @@ export default function Dashboard() {
         </div>
         <div className="card">
           <div className="card__header">
-            <div className="card__header-title text-light">Recent <strong>Documents</strong>
-              <a href="#" className="card__header-link text-bold">View All</a>
+            <div className="card__header-title text-light">
+              Recent <strong>Documents</strong>&nbsp;
+              <span className="card__header-link text-bold hyperlink">View All</span>
             </div>
             <div className="settings">
               <div className="settings__block"><i className="fas fa-edit"></i></div>
@@ -183,8 +185,9 @@ export default function Dashboard() {
         </div>
         <div className="card card--finance">
           <div className="card__header">
-            <div className="card__header-title text-light">Monthly <strong>Spending</strong>
-              <a href="#" className="card__header-link text-bold">View All</a>
+            <div className="card__header-title text-light">
+              Monthly <strong>Spending</strong>&nbsp;
+              <span className="card__header-link text-bold hyperlink">View All</span>
             </div>
             <div className="settings">
               <div className="settings__block"><i className="fas fa-edit"></i></div>
@@ -201,6 +204,7 @@ export default function Dashboard() {
     <main className="main">
       <MainHeader />
       <MainOverview />
+      <MainCards />
     </main>
   );
 }

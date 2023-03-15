@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Button, Checkbox } from '@mui/material';
 import ReactLoading from 'react-loading';
@@ -17,9 +17,9 @@ export const DataTableComponent = (props) => {
 
   const [editButtonDisabled, setEditButtonDisabled] = useState(true);
 
-  const handleSelectedRowChange = useCallback((state) => {
-    setEditButtonDisabled(state.selectedCount == 0);
-  });
+  const handleSelectedRowChange = (state) => {
+    setEditButtonDisabled(state.selectedCount === 0);
+  };
 
   const paginationComponentOptions = {
     rowsPerPageText: '페이지당 조회 갯수',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FcInspection } from 'react-icons/fc';
 import { getUserList } from '../../../utils/firebase';
-import { DataTableComponent } from '../../../components/datatabeComponent';
+import { DataTableComponent } from '../../../components/datatableComponent';
 
 export default function MemberList(props) {
   const [retrievedFlag, setRetrievedFlag] = useState(false);

@@ -4,50 +4,36 @@ import { useSelector } from 'react-redux';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { authSignOut } from '../../utils/firebase';
 import { toggleClass } from '../../utils/helpers/uihelpers';
+import { useAddEventListeners } from '../../utils/helpers/hookHelpers';
 
 export default function LayoutHeader(props) {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.userInfo.userInfo);
 
   useEffect(() => {
-    setUserDropdownListener();
-    addLogoutListener();
-
-    return (() => {
-      unsetUserDropdownListener();
-      removeLogoutListener();
-    });
-  }, []);
-
-  useEffect(() => {
     if (userInfo != null) {
       setAvatar();
     }
+    // Update avatar image
+    function setAvatar() {
+      const headerAvatar = document.querySelector('.header__avatar');
+      if (headerAvatar != null) {
+        headerAvatar.style.backgroundImage = `url(${userInfo.imgurl})`;
+        headerAvatar.style.border = 0;
+      }
+    }
   }, [userInfo])
 
+  useAddEventListeners([
+    { class: '#logout', event: 'click', handler: logoutHandler },
+    { class: '.header__avatar', event: 'click', handler: userDropdownHandler },
+  ]);
 
-  // Update avatar image
-  function setAvatar() {
-    const headerAvatar = document.querySelector('.header__avatar');
-    if (headerAvatar != null) {
-      headerAvatar.style.backgroundImage = `url(${userInfo.imgurl})`;
-      headerAvatar.style.border = 0;
-    }
-  }
 
   // Logout button
   async function logoutHandler(e) {
     await authSignOut();
     navigate('/');
-  }
-
-  function addLogoutListener() {
-    document.querySelector('#logout').addEventListener('click', logoutHandler);
-  }
-
-  function removeLogoutListener() {
-    const el = document.querySelector('#logout');
-    if (el != null) el.removeEventListener('click', logoutHandler);
   }
 
   // User avatar dropdown functionality
@@ -56,15 +42,6 @@ export default function LayoutHeader(props) {
       document.querySelector('.header__avatar > .dropdown'),
       'dropdown--active',
     );
-  }
-
-  function setUserDropdownListener() {
-    document.querySelector('.header__avatar').addEventListener('click', userDropdownHandler);
-  }
-
-  function unsetUserDropdownListener() {
-    const el = document.querySelector('.header__avatar');
-    if (el != null) el.removeEventListener('click', userDropdownHandler);
   }
 
   return (

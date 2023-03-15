@@ -1,10 +1,42 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { FormBuilder } from '../../../components/formBuilder';
 import { FcInspection } from 'react-icons/fc';
 
 const InstituteDetail = () => {
+  const submitHandler = () => {
+
+  }
+  
+  const config = {
+    id: 'institute',
+    title: '신규 조직 추가',
+    formFields: [
+      {
+        id: 'title',
+        type: 'text',
+        label: '조직명',
+        value: '',
+      },
+      {
+        id: 'representative',
+        type: 'member',
+        label: '대표자',
+        value: '',
+      },
+      {
+        id: 'uid',
+        type: 'hidden',
+        value: '',
+      },
+      {
+        id: 'location',
+        type: 'text',
+        label: '주소',
+        value: '',
+      },
+    ],
+    submitHandler: submitHandler,
+
+  }
   return (
     <main className="main">
       <div className="page-header">
@@ -13,6 +45,9 @@ const InstituteDetail = () => {
           조직관리
         </div>
       </div>
+      <FormBuilder
+        config={config}
+      />
     </main>
   )
 }
