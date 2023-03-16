@@ -81,21 +81,21 @@ export default function LayoutSidenav(props) {
       </div>
       <div className="row row--align-v-center row--align-h-center">
         <ul className="navList">
-          <li className="navList__heading">관리자메뉴</li>
+          <li className="navList__heading">관리자 메뉴</li>
             <li>
             <div className="navList__subheading row row--align-v-center">
               <span className="navList__subheading-icon"><FiUsers /></span>
-              <span className="navList__subheading-title">조직관리</span>
+              <span className="navList__subheading-title">단체 관리</span>
             </div>
             <ul className="subList subList--hidden">
-              <li className="subList__item hyperlink" src="/admin/institute/new">신규 조직 추가</li>
-              <li className="subList__item hyperlink" src="/admin/institute">조직 목록 조회</li>
+              <li className="subList__item hyperlink" src="/admin/institute/new">신규 단체 추가</li>
+              <li className="subList__item hyperlink" src="/admin/institute">단체 목록 조회</li>
             </ul>
           </li>
           <li>
             <div className="navList__subheading row row--align-v-center">
               <span className="navList__subheading-icon"><FaUser /></span>
-              <span className="navList__subheading-title">회원관리</span>
+              <span className="navList__subheading-title">회원 관리</span>
             </div>
             <ul className="subList subList--hidden">
               <li className="subList__item hyperlink" src="/admin/member/unapproved">미승인 회원 목록 조회</li>
@@ -105,7 +105,7 @@ export default function LayoutSidenav(props) {
           <li>
             <div className="navList__subheading row row--align-v-center">
               <span className="navList__subheading-icon"><TbTournament /></span>
-              <span className="navList__subheading-title">대회관리</span>
+              <span className="navList__subheading-title">대회 관리</span>
             </div>
             <ul className="subList subList--hidden">
               <li className="subList__item">신규 대회 등록</li>

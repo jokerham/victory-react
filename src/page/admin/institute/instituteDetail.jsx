@@ -1,19 +1,41 @@
+import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
 import { FormBuilder } from '../../../components/formBuilder';
 import { FcInspection } from 'react-icons/fc';
+import { addInstitute } from '../../../utils/firebase';
 
 const InstituteDetail = () => {
-  const submitHandler = () => {
+  const navigate = useNavigate();
 
+  const submitHandler = async (values) => {
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let dateTime = date+' '+time;
+
+    await addInstitute({
+      title: values.title,
+      date: dateTime,
+      uid: values.representativeUid,
+      location: values.location
+    });
+    navigate('/admin/institute');
   }
-  
+
+  const validataionSchema = yup.object().shape({
+    title: yup.string().required('단체명을 입력해주새요.'),
+    representative: yup.string().required('대표자를 선택해주세요.'),
+    location: yup.string().required('주소를 입력해주세요.'),
+  });
+
   const config = {
     id: 'institute',
-    title: '신규 조직 추가',
+    title: '신규 단체 추가',
     formFields: [
       {
         id: 'title',
         type: 'text',
-        label: '조직명',
+        label: '단체명',
         value: '',
       },
       {
@@ -23,7 +45,7 @@ const InstituteDetail = () => {
         value: '',
       },
       {
-        id: 'uid',
+        id: 'representativeUid',
         type: 'hidden',
         value: '',
       },
@@ -34,6 +56,7 @@ const InstituteDetail = () => {
         value: '',
       },
     ],
+    validationSchema: validataionSchema,
     submitHandler: submitHandler,
 
   }
@@ -42,7 +65,7 @@ const InstituteDetail = () => {
       <div className="page-header">
         <div className="page-header__title">
           <FcInspection />
-          조직관리
+          단체 관리
         </div>
       </div>
       <FormBuilder

@@ -41,19 +41,19 @@ export const DataTableComponent = (props) => {
 
     if (addButtonClickHandler != null) {
       buttons.push(
-        <Button variant="contained" id="datatable_button_add" startIcon={<IoAdd />}>추가</Button>
+        <Button key='1' variant="contained" id="datatable_button_add" startIcon={<IoAdd />}>추가</Button>
       );
     }
 
     if (modifyButtonClickHandler != null) {
       buttons.push(
-        <Button variant="contained" id="datatable_button_modify" startIcon={<VscEdit />} disabled={editButtonDisabled}>수정</Button>
+        <Button key='2' variant="contained" id="datatable_button_modify" startIcon={<VscEdit />} disabled={editButtonDisabled}>수정</Button>
       );
     }
 
     if (deleteButtonClickHandler != null) {
       buttons.push(
-        <Button variant="contained" id="datatable_button_delete" startIcon={<RiDeleteBinLine />} disabled={editButtonDisabled}>삭제</Button>
+        <Button key='3' variant="contained" id="datatable_button_delete" startIcon={<RiDeleteBinLine />} disabled={editButtonDisabled}>삭제</Button>
       );
     }
 

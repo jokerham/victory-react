@@ -4,12 +4,16 @@ import {
   getUserListByName,
   getUser,
 } from "./users";
-import { getInstituteList } from "./institutes";
+import { 
+  addInstitute,
+  getInstituteList 
+} from "./institutes";
 
 export {
   addUser,
   getUserList,
   getUserListByName,
   getUser,
+  addInstitute,
   getInstituteList
 }

@@ -11,6 +11,7 @@ import {
   getUserList,
   getUserListByName,
   getUser,
+  addInstitute,
   getInstituteList,
 } from './firestore'
 
@@ -27,6 +28,7 @@ export {
   getUserList,
   getUserListByName,
   getUser,
+  addInstitute,
   getInstituteList,
 }
 

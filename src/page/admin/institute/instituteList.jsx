@@ -42,7 +42,7 @@ export default function InstituteList() {
 
   const columns = [
     { name: 'id', selector: row => row.id, omit: true },
-    { name: '조직명', selector: row => row.title, sortable: true, grow: 1 },
+    { name: '단체명', selector: row => row.title, sortable: true, grow: 1 },
     { name: '대표자', selector: row => row.user?.name, sortable: true, grow: 1 },
     { name: '등록일', selector: row => row.date, sortable: true, grow: 1 },
     { name: '주소', selector: row => row.location, sortable: true, grow: 4 },
@@ -53,11 +53,11 @@ export default function InstituteList() {
       <div className="page-header">
         <div className="page-header__title">
           <FcInspection />
-          조직관리
+          단체 관리
         </div>
       </div>
       <DataTableComponent 
-        title='조직목록'
+        title='단체 목록'
         columns={columns}
         data={institutes}
         pending={pending}

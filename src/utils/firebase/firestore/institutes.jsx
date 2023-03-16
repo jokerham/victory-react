@@ -1,11 +1,20 @@
-import { getDocs, query, collection, orderBy } from 'firebase/firestore';
+import { addDoc, getDocs, query, collection, orderBy } from 'firebase/firestore';
 import { db } from './db';
 import { getUser } from './users';
+
+const institutesRef = collection(db, 'Institutes');
+
+async function addInstitute(values) {
+  try {
+    await addDoc(institutesRef, values)
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 async function getInstituteList() {
   try {
     let InstituteList = [];
-    const institutesRef = collection(db, 'Institutes');
     const institutesQuery = query(institutesRef, orderBy('title'));
     const snapshot = await getDocs(institutesQuery)
 
@@ -23,4 +32,7 @@ async function getInstituteList() {
   }
 }
 
-export { getInstituteList }
+export {
+  addInstitute, 
+  getInstituteList
+}
