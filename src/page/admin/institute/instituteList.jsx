@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FcInspection } from 'react-icons/fc';
-import { getInstituteList } from '../../../utils/firebase';
+import { deleteInstitute, getInstituteList } from '../../../utils/firebase';
 import { DataTableComponent } from '../../../components/datatableComponent';
 
 export default function InstituteList() {
   const [retrievedFlag, setRetrievedFlag] = useState(false);
   const [institutes, setInstitutes] = useState([]);
   const [pending, setPending] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function retrieveData() {
@@ -22,23 +20,8 @@ export default function InstituteList() {
       }
     }
     
-    if (retrievedFlag === false) {
-       retrieveData(); 
-    }
+    if (retrievedFlag === false) retrieveData();
   }, [retrievedFlag])
-
-  const addButtonClickHandler = ((e) => {
-    navigate('/institute/new');
-  });
-  
-  const modifyButtonClickHandler = ((e) => {
-    navigate('/institute/edit');
-  });
-
-  const deleteButtonClickHandler = ((e) => {
-
-  });
-
 
   const columns = [
     { name: 'id', selector: row => row.id, omit: true },
@@ -47,6 +30,27 @@ export default function InstituteList() {
     { name: '등록일', selector: row => row.date, sortable: true, grow: 1 },
     { name: '주소', selector: row => row.location, sortable: true, grow: 4 },
   ];
+
+  const onDelete = async (values) => {
+    await deleteInstitute(values.docId);
+    setRetrievedFlag(false);
+  }
+
+  const buttons = {
+    add: '/admin/institute/new',
+    edit: '/admin/institute/edit',
+    delete: onDelete,
+  }
+
+  const valueOnSelectedRow = (selectedRow) => {
+    return {
+      docId: selectedRow.id,
+      title: selectedRow.title,
+      location: selectedRow.location,
+      uid: selectedRow.uid,
+      name: selectedRow.user.name,
+    }
+  }
 
   return (
     <main className="main">
@@ -61,9 +65,8 @@ export default function InstituteList() {
         columns={columns}
         data={institutes}
         pending={pending}
-        addButtonClickHandler={addButtonClickHandler}
-        modifyButtonClickHandler={modifyButtonClickHandler}
-        deleteButtonClickHandler={deleteButtonClickHandler}
+        buttons={buttons}
+        valueOnSelectedRow={valueOnSelectedRow}
       />
     </main>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaTimes, FaUser, FaAward } from 'react-icons/fa';
 import { FiUsers } from "react-icons/fi";
@@ -88,8 +89,8 @@ export default function LayoutSidenav(props) {
               <span className="navList__subheading-title">단체 관리</span>
             </div>
             <ul className="subList subList--hidden">
-              <li className="subList__item hyperlink" src="/admin/institute/new">신규 단체 추가</li>
-              <li className="subList__item hyperlink" src="/admin/institute">단체 목록 조회</li>
+              <Link to="/admin/institute/new"><li className="subList__item">신규 단체 추가</li></Link>
+              <Link to="/admin/institute"><li className="subList__item">단체 목록 조회</li></Link>
             </ul>
           </li>
           <li>
@@ -98,8 +99,8 @@ export default function LayoutSidenav(props) {
               <span className="navList__subheading-title">회원 관리</span>
             </div>
             <ul className="subList subList--hidden">
-              <li className="subList__item hyperlink" src="/admin/member/unapproved">미승인 회원 목록 조회</li>
-              <li className="subList__item hyperlink" src="/admin/member/approved">승인 회원 목록 조회</li>
+              <Link to="/admin/member/unapproved"><li className="subList__item">미승인 회원 목록 조회</li></Link>
+              <Link to="/admin/member/approved"><li className="subList__item">승인 회원 목록 조회</li></Link>
             </ul>
           </li>
           <li>

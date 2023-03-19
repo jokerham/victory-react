@@ -1,4 +1,4 @@
-import { addDoc, getDocs, query, collection, orderBy } from 'firebase/firestore';
+import { addDoc, updateDoc, getDoc, getDocs, deleteDoc, doc, query, collection, orderBy } from 'firebase/firestore';
 import { db } from './db';
 import { getUser } from './users';
 
@@ -6,7 +6,24 @@ const institutesRef = collection(db, 'Institutes');
 
 async function addInstitute(values) {
   try {
-    await addDoc(institutesRef, values)
+    if (existsInstitute(values.docId)) {
+      const docId = values.docId;
+      const docRef = doc(institutesRef, docId);
+      delete values.docId;
+      await updateDoc(docRef, values);
+    } else {
+      await addDoc(institutesRef, values);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function existsInstitute(docId) {
+  try {
+    const docRef = doc(institutesRef, docId);
+    const snapshot = await getDoc(docRef);
+    return snapshot.exists();
   } catch (error) {
     console.log(error);
   }
@@ -32,7 +49,18 @@ async function getInstituteList() {
   }
 }
 
+async function deleteInstitute(docId) {
+  try {
+    const docRef = doc(institutesRef, docId);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   addInstitute, 
-  getInstituteList
+  existsInstitute,
+  getInstituteList,
+  deleteInstitute
 }

@@ -1,11 +1,14 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { FormBuilder } from '../../../components/formBuilder';
 import { FcInspection } from 'react-icons/fc';
 import { addInstitute } from '../../../utils/firebase';
+import { useState } from 'react';
 
 const InstituteDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const instituteValue = location.state;
 
   const submitHandler = async (values) => {
     let today = new Date();
@@ -14,6 +17,7 @@ const InstituteDetail = () => {
     let dateTime = date+' '+time;
 
     await addInstitute({
+      docId: values.docId,
       title: values.title,
       date: dateTime,
       uid: values.representativeUid,
@@ -32,33 +36,14 @@ const InstituteDetail = () => {
     id: 'institute',
     title: '신규 단체 추가',
     formFields: [
-      {
-        id: 'title',
-        type: 'text',
-        label: '단체명',
-        value: '',
-      },
-      {
-        id: 'representative',
-        type: 'member',
-        label: '대표자',
-        value: '',
-      },
-      {
-        id: 'representativeUid',
-        type: 'hidden',
-        value: '',
-      },
-      {
-        id: 'location',
-        type: 'text',
-        label: '주소',
-        value: '',
-      },
+      { id: 'docId', type: 'hidden', value: (instituteValue == null || !instituteValue.hasOwnProperty('docId')) ? '' : instituteValue['docId'] },
+      { id: 'title', type: 'text', label: '단체명', value: (instituteValue == null || !instituteValue.hasOwnProperty('title')) ? '' : instituteValue['title'] },
+      { id: 'representative', type: 'member', label: '대표자', value: (instituteValue == null || !instituteValue.hasOwnProperty('name')) ? '' : instituteValue['name'] },
+      { id: 'representativeUid', type: 'hidden', value: (instituteValue == null  || !instituteValue.hasOwnProperty('uid')) ? '' : instituteValue['uid'] },
+      { id: 'location', type: 'text', label: '주소', value: (instituteValue == null  || !instituteValue.hasOwnProperty('location')) ? '' : instituteValue['location'] },
     ],
     validationSchema: validataionSchema,
     submitHandler: submitHandler,
-
   }
   return (
     <main className="main">

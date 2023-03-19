@@ -1,10 +1,31 @@
-import { query, collection, where, orderBy, getDocs } from 'firebase/firestore';
+import { addDoc, updateDoc, getDoc, getDocs, deleteDoc, doc, query, collection, where, orderBy } from 'firebase/firestore';
 import { db } from './db';
 
 const usersRef = collection(db, 'Users');
 
-function addUser(userInfo) {
+async function addUser(values) {
+  try {
+    if (existsUser(values.docId)) {
+      const docId = values.docId;
+      const docRef = doc(usersRef, docId);
+      delete values.docId;
+      await updateDoc(docRef, values);
+    } else {
+      await addDoc(usersRef, values);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
+async function existsUser(docId) {
+  try {
+    const docRef = doc(usersRef, docId);
+    const snapshot = await getDoc(docRef);
+    return snapshot.exists();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function getUserList(approved) {
@@ -14,6 +35,7 @@ async function getUserList(approved) {
     const s = await getDocs(q)
     s.forEach((doc) => {
       const user = doc.data();
+      user.id = doc.id;
       users.push(user);
     });
     return users;
@@ -52,10 +74,20 @@ async function getUser(uid) {
     console.log(error);
   }
 }
+async function deleteUser(docId) {
+  try {
+    const docRef = doc(usersRef, docId);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export { 
   addUser,
+  existsUser,
   getUserList,
   getUserListByName,
   getUser,
+  deleteUser,
 }

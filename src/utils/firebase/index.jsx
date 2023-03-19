@@ -8,11 +8,15 @@ import {
 } from './authentication';
 import {
   addUser,
+  existsUser,
   getUserList,
   getUserListByName,
   getUser,
+  deleteUser,
   addInstitute,
+  existsInstitute,
   getInstituteList,
+  deleteInstitute,
 } from './firestore'
 
 export {
@@ -25,11 +29,15 @@ export {
   authOnAuthStateChanged,
   // Firestore functions
   addUser,
+  existsUser,
   getUserList,
   getUserListByName,
   getUser,
+  deleteUser,
   addInstitute,
+  existsInstitute,
   getInstituteList,
+  deleteInstitute,
 }
 
 // Reference

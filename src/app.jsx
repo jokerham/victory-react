@@ -25,6 +25,7 @@ function App() {
       <Route path="/admin/*" element={<Layout />} >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="institute/new" element={<InstituteDetail />} />
+        <Route path="institute/edit" element={<InstituteDetail />} />
         <Route path="institute" element={<InstituteList />} />
         <Route path="member/*">
           <Route path="approved" element={<MemberList approved={true} key={1}/>} />

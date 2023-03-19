@@ -1,19 +1,27 @@
 import {
   addUser,
+  existsUser,
   getUserList,
   getUserListByName,
   getUser,
+  deleteUser,
 } from "./users";
 import { 
   addInstitute,
-  getInstituteList 
+  existsInstitute,
+  getInstituteList,
+  deleteInstitute
 } from "./institutes";
 
 export {
   addUser,
+  existsUser,
   getUserList,
   getUserListByName,
   getUser,
+  deleteUser,
   addInstitute,
-  getInstituteList
+  existsInstitute,
+  getInstituteList,
+  deleteInstitute,
 }

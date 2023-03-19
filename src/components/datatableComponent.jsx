@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Button, Checkbox } from '@mui/material';
 import ReactLoading from 'react-loading';
@@ -11,14 +12,17 @@ export const DataTableComponent = (props) => {
   const columns = props.columns;
   const data = props.data;
   const pending = props.pending;
-  const addButtonClickHandler = props.addButtonClickHandler;
-  const modifyButtonClickHandler = props.modifyButtonClickHandler;
-  const deleteButtonClickHandler = props.deleteButtonClickHandler;
+  const buttons = props.buttons;
+  const valueOnSelectedRow = props.valueOnSelectedRow;
 
   const [editButtonDisabled, setEditButtonDisabled] = useState(true);
+  const [rowValue, setRowValue] = useState({});
 
   const handleSelectedRowChange = (state) => {
     setEditButtonDisabled(state.selectedCount === 0);
+    setRowValue(
+      state.selectedCount === 0 ?
+        '' : valueOnSelectedRow(state.selectedRows[0]));
   };
 
   const paginationComponentOptions = {
@@ -37,29 +41,52 @@ export const DataTableComponent = (props) => {
   }
   
   const DataTableButtons = () => {
-    let buttons = [];
+    let buttonComponents = [];
 
-    if (addButtonClickHandler != null) {
-      buttons.push(
-        <Button key='1' variant="contained" id="datatable_button_add" startIcon={<IoAdd />}>추가</Button>
-      );
-    }
+    const possiblePresetButtons = [
+      { name: 'add', icon: <IoAdd />, label: '추가', toggleOnSelect: false},
+      { name: 'edit', icon: <VscEdit />, label: '수정', toggleOnSelect: true},
+      { name: 'delete', icon: <RiDeleteBinLine />, label: '삭제', toggleOnSelect: true},
+    ];
 
-    if (modifyButtonClickHandler != null) {
-      buttons.push(
-        <Button key='2' variant="contained" id="datatable_button_modify" startIcon={<VscEdit />} disabled={editButtonDisabled}>수정</Button>
-      );
-    }
-
-    if (deleteButtonClickHandler != null) {
-      buttons.push(
-        <Button key='3' variant="contained" id="datatable_button_delete" startIcon={<RiDeleteBinLine />} disabled={editButtonDisabled}>삭제</Button>
-      );
-    }
+    possiblePresetButtons.forEach((presetButton) => {
+      if (buttons.hasOwnProperty(presetButton.name)) {
+        if (typeof buttons[presetButton.name] === 'string') {
+          const pathname = buttons[presetButton.name];
+          const link = { pathname: pathname };
+          const state = (editButtonDisabled) ? {} : rowValue;
+          buttonComponents.push(
+            <Link to={link} state={state} key={presetButton.name} >
+              <Button 
+                variant="contained" 
+                startIcon={presetButton.icon} 
+                disabled={presetButton.toggleOnSelect && editButtonDisabled}>
+                {presetButton.label}
+              </Button>
+            </Link>
+          );
+        } else {
+          const onClickEventHandler = (e) => {
+            const callback = buttons[presetButton.name];
+            callback(rowValue);
+          }
+          buttonComponents.push(
+            <Button 
+              key={presetButton.name} 
+              variant="contained" 
+              startIcon={presetButton.icon} 
+              disabled={presetButton.toggleOnSelect && editButtonDisabled}
+              onClick={onClickEventHandler}>
+              {presetButton.label}
+            </Button>
+          );
+        }
+      }
+    })
 
     return (
       <div className="page-body__card_buttons">
-        {buttons}
+        {buttonComponents}
       </div>
     )
   }
