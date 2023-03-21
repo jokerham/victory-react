@@ -8,16 +8,17 @@ import {
   signOut,
 } from 'firebase/auth'
 import { app } from '../app';
-import { getUser, addUser } from '../firestore';
+import { Users } from '../firestore';
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+const dbUsers = new Users();
 
 const authSignInWithGoogle = async() => {
   try {
     const res = await signInWithPopup(auth, googleProvider);
     const user = res.user;
-    const userDoc = getUser(user.uid);
+    const userDoc = dbUsers.SelectByUid(user.uid);
     if (userDoc.doc !== null) {
       const userInfo = {
         uid: user.uid,
@@ -25,7 +26,7 @@ const authSignInWithGoogle = async() => {
         authProvider: "Google",
         email: user.email,
       }
-      await addUser(userInfo);
+      await dbUsers.add(userInfo);
     }
   } catch (err) {
     console.error(err);
@@ -50,7 +51,7 @@ const authCreateUserWithEmailAndPassword = async(email, password) => {
       authProvider: "Email",
       email,
     }
-    await addUser(userInfo);
+    await dbUsers.add(userInfo);
   } catch (err) {
     console.error(err);
   }

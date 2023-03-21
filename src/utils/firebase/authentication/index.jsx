@@ -1,17 +1,3 @@
-import {
-  authSignInWithGoogle,
-  authSignInWithEmailAndPassword,
-  authCreateUserWithEmailAndPassword,
-  authSendPasswordResetEmail,
-  authSignOut,
-  authOnAuthStateChanged,
-} from './authentication';
+import * as AuthenticationHelper from './authentication';
 
-export {
-  authSignInWithGoogle,
-  authSignInWithEmailAndPassword,
-  authCreateUserWithEmailAndPassword,
-  authSendPasswordResetEmail,
-  authSignOut,
-  authOnAuthStateChanged,
-}
+export { AuthenticationHelper }

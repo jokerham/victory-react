@@ -1,93 +1,71 @@
-import { addDoc, updateDoc, getDoc, getDocs, deleteDoc, doc, query, collection, where, orderBy } from 'firebase/firestore';
-import { db } from './db';
+import FirebaseBaseClass from "./base";
+import Institutes from "./institutes";
 
-const usersRef = collection(db, 'Users');
+export default class Users extends FirebaseBaseClass {
+  constructor() {
+    super('Users');
+  }
 
-async function addUser(values) {
-  try {
-    if (existsUser(values.docId)) {
-      const docId = values.docId;
-      const docRef = doc(usersRef, docId);
-      delete values.docId;
-      await updateDoc(docRef, values);
-    } else {
-      await addDoc(usersRef, values);
+  async selectAll() {
+    try {
+      let records = [];
+      let tempRecords = await this.select(
+        [], [{ field: 'name' }]);
+      tempRecords.forEach(async record => {
+        if (record.hasOwnProperty('instituteId') && record.instituteId != null && record.instituteId != '') {
+          const dbInstitute = new Institutes();
+          record.user = await dbInstitute.selectById(record.instituteId);
+        }
+        records.push(record);
+      });
+      return records;
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
-}
 
-async function existsUser(docId) {
-  try {
-    const docRef = doc(usersRef, docId);
-    const snapshot = await getDoc(docRef);
-    return snapshot.exists();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getUserList(approved) {
-  try {
-    let users = [];
-    const q = query(usersRef, where('approved', '==', approved), orderBy('name'));
-    const s = await getDocs(q)
-    s.forEach((doc) => {
-      const user = doc.data();
-      user.id = doc.id;
-      users.push(user);
-    });
-    return users;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getUserListByName(name) {
-  try {
-    let users = [];
-    const q = query(usersRef, orderBy('name'));
-    const s = await getDocs(q)
-    s.forEach((doc) => {
-      const user = doc.data();
-      if (user.name.includes(name)) {
-        users.push(user);
+  async selectByApproved(approved) {
+    try {
+      let records = [];
+      let tempRecords = await this.select(
+        [{expression: 'approved', value: approved}], 
+        [{ field: 'name' }]);
+      for (let i in tempRecords) {
+        let record = tempRecords[i];
+        if (record.hasOwnProperty('instituteId') && record.instituteId != null && record.instituteId != '') {
+          const dbInstitute = new Institutes();
+          record.institute = await dbInstitute.selectById(record.instituteId);
+        }
+        records.push(record);
       }
-    });
-    return users;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getUser(uid) {
-  try {
-    const q = query(usersRef, where('uid', '==', uid));
-    const s = await getDocs(q);
-    if (s.docs.length > 0) {
-      return s.docs[0].data();
-    } else {
-      return null;
+      return records;
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
   }
-}
-async function deleteUser(docId) {
-  try {
-    const docRef = doc(usersRef, docId);
-    await deleteDoc(docRef);
-  } catch (error) {
-    console.log(error);
-  }
-}
 
-export { 
-  addUser,
-  existsUser,
-  getUserList,
-  getUserListByName,
-  getUser,
-  deleteUser,
+  async selectByName(name) {
+    try {
+      let records = [];
+      let tempRecords = await this.selectAll();
+      tempRecords.forEach(record => {
+        if (record.name.includes(name)) {
+          records.push(record);
+        }
+      })
+      return records;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async approveUser(id) {
+    try {
+      let user = await this.selectById(id);
+      user.approved = true;
+      await this.update(id, user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

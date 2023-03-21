@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Swal from 'sweetalert2'
 import { useSelector, useDispatch } from 'react-redux';
 import { set } from '../../store/reducers/userInfo';
-import { authSignInWithEmailAndPassword, getUser } from '../../utils/firebase';
+import { AuthenticationHelper, FirestoreHelper } from '../../utils/firebase';
 import { ReactComponent as Signinline } from './signInLine.svg';
 import './signIn.css';
 
@@ -88,10 +88,11 @@ export default function SignIn() {
 
   const submitForm = async (values) => {
     // console.log(values);
-    authSignInWithEmailAndPassword(values.email, values.password)
+    AuthenticationHelper.authSignInWithEmailAndPassword(values.email, values.password)
       .then(async (userCredential) => {
-        const tmpUserInfo = await getUser(userCredential.user.uid);
-        dispatch(set(tmpUserInfo));
+        const dbUsers = new FirestoreHelper.Users();
+        const userInfo = await dbUsers.selectByUid(userCredential.user.uid);
+        dispatch(set(userInfo));
         navigate('/admin/dashboard');
       })
       .catch((error) => {

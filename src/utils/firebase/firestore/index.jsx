@@ -1,27 +1,4 @@
-import {
-  addUser,
-  existsUser,
-  getUserList,
-  getUserListByName,
-  getUser,
-  deleteUser,
-} from "./users";
-import { 
-  addInstitute,
-  existsInstitute,
-  getInstituteList,
-  deleteInstitute
-} from "./institutes";
+import Users from "./users";
+import Institutes from "./institutes";
 
-export {
-  addUser,
-  existsUser,
-  getUserList,
-  getUserListByName,
-  getUser,
-  deleteUser,
-  addInstitute,
-  existsInstitute,
-  getInstituteList,
-  deleteInstitute,
-}
+export { Users, Institutes }

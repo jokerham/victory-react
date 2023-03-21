@@ -109,10 +109,11 @@ export default function LayoutSidenav(props) {
               <span className="navList__subheading-title">대회 관리</span>
             </div>
             <ul className="subList subList--hidden">
-              <li className="subList__item">신규 대회 등록</li>
-              <li className="subList__item">대회 목록 조회</li>
-              <li className="subList__item">대전 매칭</li>
-              <li className="subList__item">대전 목록 조회</li>
+              <Link to="/admin/tournament/new"><li className="subList__item">신규 대회 등록</li></Link>
+              <Link to="/admin/tournament"><li className="subList__item">대회 목록 조회</li></Link>
+              <Link to="/admin/matching"><li className="subList__item">대전 매칭</li></Link>
+              <Link to="/admin/matches"><li className="subList__item">대전 목록 조회</li></Link>
+              <Link to="/admin/matches/result"><li className="subList__item">대전 결과 기록</li></Link>
             </ul>
           </li>
           <li>
@@ -121,8 +122,8 @@ export default function LayoutSidenav(props) {
               <span className="navList__subheading-title">상장</span>
             </div>
             <ul className="subList subList--hidden">
-              <li className="subList__item">대회별 상장</li>
-              <li className="subList__item">회원별 상장</li>
+              <Link to="/admin/awards/tournament"><li className="subList__item">대회별 상장</li></Link>
+              <Link to="/admin/awards/member"><li className="subList__item">회원별 상장</li></Link>
             </ul>
           </li>
         </ul>

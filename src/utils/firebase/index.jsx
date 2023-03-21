@@ -1,43 +1,11 @@
-import {
-  authSignInWithGoogle,
-  authSignInWithEmailAndPassword,
-  authCreateUserWithEmailAndPassword,
-  authSendPasswordResetEmail,
-  authSignOut,
-  authOnAuthStateChanged,
-} from './authentication';
-import {
-  addUser,
-  existsUser,
-  getUserList,
-  getUserListByName,
-  getUser,
-  deleteUser,
-  addInstitute,
-  existsInstitute,
-  getInstituteList,
-  deleteInstitute,
-} from './firestore'
+import { AuthenticationHelper } from './authentication';
+import * as FirestoreHelper from './firestore'
 
 export {
   // Fireauth functions
-  authSignInWithGoogle,
-  authSignInWithEmailAndPassword,
-  authCreateUserWithEmailAndPassword,
-  authSendPasswordResetEmail,
-  authSignOut,
-  authOnAuthStateChanged,
+  AuthenticationHelper,
   // Firestore functions
-  addUser,
-  existsUser,
-  getUserList,
-  getUserListByName,
-  getUser,
-  deleteUser,
-  addInstitute,
-  existsInstitute,
-  getInstituteList,
-  deleteInstitute,
+  FirestoreHelper,
 }
 
 // Reference

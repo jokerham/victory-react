@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { authSignOut } from '../../utils/firebase';
+import { AuthenticationHelper } from '../../utils/firebase';
 import { toggleClass } from '../../utils/helpers/uihelpers';
 import { useAddEventListeners } from '../../utils/helpers/hookHelpers';
 
@@ -32,7 +32,7 @@ export default function LayoutHeader(props) {
 
   // Logout button
   async function logoutHandler(e) {
-    await authSignOut();
+    await AuthenticationHelper.authSignOut();
     navigate('/');
   }
 

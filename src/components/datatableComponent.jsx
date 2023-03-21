@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Button, Checkbox } from '@mui/material';
 import ReactLoading from 'react-loading';
+import { BsCheckCircle } from 'react-icons/bs';
 import { IoAdd } from 'react-icons/io5';
 import { VscEdit } from 'react-icons/vsc';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -47,6 +48,7 @@ export const DataTableComponent = (props) => {
       { name: 'add', icon: <IoAdd />, label: '추가', toggleOnSelect: false},
       { name: 'edit', icon: <VscEdit />, label: '수정', toggleOnSelect: true},
       { name: 'delete', icon: <RiDeleteBinLine />, label: '삭제', toggleOnSelect: true},
+      { name: 'approve', icon: <BsCheckCircle />, label: '승인', toggleOnSelect: true},
     ];
 
     possiblePresetButtons.forEach((presetButton) => {

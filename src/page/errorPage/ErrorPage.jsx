@@ -16,7 +16,7 @@ export default function ErrorPage(props) {
     var ctx = c.getContext("2d");
 
     //making the canvas full screen
-    c.height = window.innerHeight;
+    c.height = document.documentElement.scrollHeight; // window.innerHeight;
     c.width = window.innerWidth;
 
     //chinese characters - taken from the unicode charset
@@ -90,25 +90,27 @@ export default function ErrorPage(props) {
   })
 
   return (
-    <div id='error-page'>
-      <div id='error-inner'>
-        <div className='box-404'>{statusCode}</div>
-        <div className='box-message'>
-          <h1>{title}</h1>
-          <p>{message}</p>
-          <p>
-            <a href='/' title='HOME'>홈페이지 돌아가기</a> ?
-          </p>
-          <div id='search-box'>
-            <form action='/search' id='cse-search-box' method='get'>
-              <input id='search-text' name='q' type='text' value='' />
-              <button id='search-button' type='submit' />
-            </form>
+    <>
+      <div id='error-page'>
+        <div id='error-inner'>
+          <div className='box-404'>{statusCode}</div>
+          <div className='box-message'>
+            <h1>{title}</h1>
+            <p>{message}</p>
+            <p>
+              <a href='/' title='HOME'>홈페이지 돌아가기</a> ?
+            </p>
+            <div id='search-box'>
+              <form action='/search' id='cse-search-box' method='get'>
+                <input id='search-text' name='q' type='text' value='' />
+                <button id='search-button' type='submit' />
+              </form>
+            </div>
           </div>
         </div>
       </div>
       <canvas id="c"></canvas>
-    </div>
+    </>
   );
 }
 

@@ -1,66 +1,43 @@
-import { addDoc, updateDoc, getDoc, getDocs, deleteDoc, doc, query, collection, orderBy } from 'firebase/firestore';
-import { db } from './db';
-import { getUser } from './users';
+import FirebaseBaseClass from './base';
+import Users from './users';
 
-const institutesRef = collection(db, 'Institutes');
 
-async function addInstitute(values) {
-  try {
-    if (existsInstitute(values.docId)) {
-      const docId = values.docId;
-      const docRef = doc(institutesRef, docId);
-      delete values.docId;
-      await updateDoc(docRef, values);
-    } else {
-      await addDoc(institutesRef, values);
-    }
-  } catch (error) {
-    console.log(error);
+export default class Institutes extends FirebaseBaseClass {
+
+  constructor() {
+    super('Institutes');
   }
-}
 
-async function existsInstitute(docId) {
-  try {
-    const docRef = doc(institutesRef, docId);
-    const snapshot = await getDoc(docRef);
-    return snapshot.exists();
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getInstituteList() {
-  try {
-    let InstituteList = [];
-    const institutesQuery = query(institutesRef, orderBy('title'));
-    const snapshot = await getDocs(institutesQuery)
-
-    for (const doc of snapshot.docs) {
-      let institute = doc.data();
-      institute.id = doc.id;
-      if (institute.uid != null) {
-        institute.user = await getUser(institute.uid)
+  async selectAll() {
+    const dbUsers = new Users();
+    try {
+      let records = [];
+      let tempRecords = await this.select([], [{ field: 'title' }]);
+      for (let i in tempRecords) {
+        let record = tempRecords[i];
+        if (record.hasOwnProperty('userId') && record.userId != null && record.userId != '') {
+          record.user = await dbUsers.selectById(record.userId);
+        }
+        records.push(record);
       }
-      InstituteList.push(institute);
+      return records;
+    } catch (error) {
+      console.log(error);
     }
-    return InstituteList;
-  } catch (error) {
-    console.log(error);
   }
-}
 
-async function deleteInstitute(docId) {
-  try {
-    const docRef = doc(institutesRef, docId);
-    await deleteDoc(docRef);
-  } catch (error) {
-    console.log(error);
+  async selectByTitle(title) {
+    try {
+      let records = [];
+      let tempRecords = await this.selectAll();
+      tempRecords.forEach(record => {
+        if (record.title.includes(title)) {
+          records.push(record);
+        }
+      })
+      return records;
+    } catch (error) {
+      console.log(error);
+    }
   }
-}
-
-export {
-  addInstitute, 
-  existsInstitute,
-  getInstituteList,
-  deleteInstitute
 }

@@ -547,13 +547,13 @@ code {
 .form_body {
   padding: 15px;
 
-  &__fields > div {
+  &__fields > div > div {
     align-items: center;
     display: inline-flex;
     width: 100%;
     height: 35px;
     margin-bottom: 10px;
-
+    
     & > label {
       margin: 0 15px 0 0;
       display: inline-block;
@@ -573,6 +573,38 @@ code {
       border-width: 1px;
       border-radius: 5px;
       border-style: solid;
+    }
+  
+    & > select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      display: inline-block;
+      padding: 5px 30px 5px 5px;
+      flex: 9;
+      font-size: 1em;
+      height: auto;
+      color: black;
+      border: #aaaaaa;
+      border-width: 1px;
+      border-radius: 5px;
+      border-style: solid;
+      background-image: linear-gradient(45deg, transparent 50%, #aaaaaa 50%),
+        linear-gradient(135deg, #aaaaaa 50%, transparent 50%),
+        linear-gradient(to right, #cccccc, #cccccc);
+      background-position: calc(100% - 15px) center, 
+                          calc(100% - 10px) center, 
+                          100% 0;
+      background-size: 5px 5px, 5px 5px, 1px 100%;
+      background-repeat: no-repeat;
+
+      >:focus {
+        height: auto !important;
+      }
+
+      > option {
+        padding: 5px 0;
+      }
     }
   }
 }
@@ -624,44 +656,55 @@ code {
   &__body {
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
 
-  &__body > input {
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 10px;
-    color: #000;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
+    & > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
 
-  &__body > svg {
-    width: 100%;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
+      & > input {
+        width: 100%;
+        padding: 5px;
+        color: #000;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+    
+      &  > svg {
+        margin-left: 10px;
+        padding: 12px 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    }
+    
+    & > ul {
+      list-style: none;
+      padding: 5px;
+      margin: 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      line-height: 40px;
+      min-height: 200px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
 
-  &__body > ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 300px;
-    overflow-y: auto;
-  }
+    & > li {
+      padding: 10px;
+      cursor: pointer;
+      transition: backgroun-color 0.2s ease;
 
-  &__body > li {
-    padding: 10px;
-    cursor: pointer;
-    transition: backgroun-color 0.2s ease;
-  }
-
-  &__body > li:hover {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #f2f2f2;
+      & > li:hover {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #f2f2f2;
+      }
+    }
   }
 }
 

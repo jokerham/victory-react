@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FcInspection } from 'react-icons/fc';
-import { deleteInstitute, getInstituteList } from '../../../utils/firebase';
+import { FirestoreHelper } from '../../../utils/firebase';
 import { DataTableComponent } from '../../../components/datatableComponent';
 
 export default function InstituteList() {
@@ -8,11 +8,13 @@ export default function InstituteList() {
   const [institutes, setInstitutes] = useState([]);
   const [pending, setPending] = useState(true);
 
+  const DbInstitutes = new FirestoreHelper.Institutes();
+
   useEffect(() => {
     async function retrieveData() {
       try {
         setRetrievedFlag(true);
-        const instituteList = await getInstituteList();
+        const instituteList = await DbInstitutes.selectAll();
         setInstitutes(instituteList);
         setPending(false);
       } catch (error) {
@@ -32,7 +34,7 @@ export default function InstituteList() {
   ];
 
   const onDelete = async (values) => {
-    await deleteInstitute(values.docId);
+    await DbInstitutes.delete(values.id);
     setRetrievedFlag(false);
   }
 
@@ -44,11 +46,11 @@ export default function InstituteList() {
 
   const valueOnSelectedRow = (selectedRow) => {
     return {
-      docId: selectedRow.id,
+      id: selectedRow.id,
       title: selectedRow.title,
       location: selectedRow.location,
-      uid: selectedRow.uid,
-      name: selectedRow.user.name,
+      userId: selectedRow.userId,
+      name: selectedRow.user?.name,
     }
   }
 

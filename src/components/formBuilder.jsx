@@ -6,6 +6,7 @@ import { FaUndoAlt } from 'react-icons/fa';
 import { RiSave3Fill } from 'react-icons/ri';
 import { IoSearch } from 'react-icons/io5';
 import MemberSelecterModal from '../components/memberSelecterModal';
+import InstituteSelecterModal from '../components/instituteSelecterModal';
 import { useAddEventListeners } from '../utils/helpers/hookHelpers';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -56,27 +57,54 @@ const FormBody = (props) => {
   const formik = useFormikContext();
   const [fieldName, setFieldName] = useState("");
   const [popupType, setPopupType] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
+  const [isInstituteModalOpen, setIsInstituteModalOpen] = useState(false);
 
   const closeHandler = () => {
-    setIsModalOpen(false);
+    switch (popupType) {
+      case 'member':
+        setIsMemberModalOpen(false);
+        break;
+      case 'institute':
+        setIsInstituteModalOpen(false);
+        break;
+      default:
+        break;
+    }
   }
 
   const memberPopupHandler = (e) => {
     setFieldName(e.target.getAttribute('id'));
     setPopupType('member');
-    setIsModalOpen(true);
+    setIsMemberModalOpen(true);
   }
 
-  const selectHandler = (user) => {
-    formik.setFieldValue(fieldName, user.name);
-    if (popupType === 'member')
-      formik.setFieldValue(fieldName + 'Uid', user.uid);
-    setIsModalOpen(false);
+  const institutePopupHandler = (e) => {
+    setFieldName(e.target.getAttribute('id'));
+    setPopupType('institute');
+    setIsInstituteModalOpen(true);
+  }
+
+  const selectHandler = (obj) => {
+    switch (popupType) {
+      case 'member':
+        formik.setFieldValue(fieldName, obj.name);
+        formik.setFieldValue(fieldName + 'Uid', obj.id);
+        setIsMemberModalOpen(false);
+        break;
+      case 'institute':
+        formik.setFieldValue(fieldName, obj.title);
+        formik.setFieldValue(fieldName + 'Id', obj.id);
+        setIsInstituteModalOpen(false);
+        break;
+      default:
+        break;
+    }
   }
 
   useAddEventListeners([
     {class: '.memberSelecter', event: 'click', handler: memberPopupHandler},
+    {class: '.instituteSelecter', event: 'click', handler: institutePopupHandler},
   ]);
 
   const { values, handleChange } = formik;
@@ -95,32 +123,67 @@ const FormBody = (props) => {
       classNames.push('memberSelecter');
       readOnly = true;
     }
+    if (formField.type === 'institute') {
+      fieldType = 'text';
+      classNames.push('instituteSelecter');
+      readOnly = true;
+    }
 
-    return fieldType !== 'hidden' ? (
-      <div key={formField.id}>
-        <label htmlFor={formField.id}>{formField.label}</label>
-        <Field
-          id={formField.id}
-          name={formField.id}
-          type={fieldType}
-          readOnly={readOnly}
-          className={classNames.join(' ')}
-          value={fieldValue}
-          onChange={handleChange}
-        />
-      </div>
-    ) : (
-      <Field
-        key={formField.id}
-        id={formField.id}
-        name={formField.id}
-        type={fieldType}
-        readOnly={readOnly}
-        className={classNames.join(' ')}
-        value={fieldValue}
-        onChange={handleChange}
-      />
-    );
+    let content;
+    switch (fieldType) {
+      case 'hidden': 
+        content = 
+          <Field
+            id={formField.id}
+            name={formField.id}
+            type={fieldType}
+            readOnly={readOnly}
+            className={classNames.join(' ')}
+            value={fieldValue}
+            onChange={handleChange}
+          />
+          break;
+      case 'select':
+        const options = formField.option.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ));
+        options.unshift(
+          <option key='empty' value=''></option>
+        )
+        content = 
+          <div>
+            <label htmlFor={formField.id}>{formField.label}</label>
+            <select
+              id={formField.id}
+              name={formField.id}
+              type={fieldType}
+              readOnly={readOnly}
+              className={classNames.join(' ')}
+              value={fieldValue}
+              onChange={handleChange}
+            >
+              {options}
+            </select>
+          </div>
+        break;
+      default:
+        content = 
+          <div>
+            <label htmlFor={formField.id}>{formField.label}</label>
+            <Field
+              id={formField.id}
+              name={formField.id}
+              type={fieldType}
+              readOnly={readOnly}
+              className={classNames.join(' ')}
+              value={fieldValue}
+              onChange={handleChange}
+            />
+          </div>
+        break;
+    }
+
+    return <div key={formField.id}>{content}</div>;
   });
 
   return (
@@ -128,8 +191,11 @@ const FormBody = (props) => {
       <div className="form_body__fields">
         {fields}
       </div>
-      {isModalOpen && (
+      {isMemberModalOpen && (
         <MemberSelecterModal onClose={closeHandler} onSelect={selectHandler} />
+      )}
+      {isInstituteModalOpen && (
+        <InstituteSelecterModal onClose={closeHandler} onSelect={selectHandler} />
       )}
     </div>
   );

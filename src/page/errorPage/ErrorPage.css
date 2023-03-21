@@ -1,5 +1,5 @@
 /*Halaman 404 Seocips*/
-canvas {
+#c {
   display: block;
   z-index: 77777;
   position: absolute;
@@ -7,9 +7,10 @@ canvas {
   left: 0;
 }
 #error-page {
-  background:#333;margin:0;padding:0;font-family: calibri;color:#ddd;
-  position: fixed !important;
-  position: absolute;
+  background:#00000000;margin:0;padding:0;font-family: calibri;color:#ddd;
+  /*position: fixed !important;
+  position: absolute;*/
+  position: relative;
   text-align: center;
   top: 0;
   right: 0;
@@ -20,6 +21,11 @@ canvas {
 #error-page a:link, #error-page a:visited, #error-page a:hover{text-decoration:none; color:#fff;font-weight: bold;}
 #error-inner {
   margin: 11% auto;
+  height: 600px;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #error-inner .box-404 {

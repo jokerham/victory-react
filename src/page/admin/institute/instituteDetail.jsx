@@ -1,14 +1,14 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { FirestoreHelper } from '../../../utils/firebase';
 import { FormBuilder } from '../../../components/formBuilder';
 import { FcInspection } from 'react-icons/fc';
-import { addInstitute } from '../../../utils/firebase';
-import { useState } from 'react';
 
 const InstituteDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const instituteValue = location.state;
+  const DbInstitutes = new FirestoreHelper.Institutes();
 
   const submitHandler = async (values) => {
     let today = new Date();
@@ -16,13 +16,24 @@ const InstituteDetail = () => {
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     let dateTime = date+' '+time;
 
-    await addInstitute({
-      docId: values.docId,
-      title: values.title,
-      date: dateTime,
-      uid: values.representativeUid,
-      location: values.location
-    });
+    if (values.id == null) {
+      await DbInstitutes.add({
+        title: values.title,
+        date: dateTime,
+        userId: values.representativeId,
+        location: values.location
+      });
+    } else {
+      await DbInstitutes.update(
+        values.id, 
+        {
+          title: values.title,
+          date: dateTime,
+          userId: values.representativeId,
+          location: values.location
+        });
+    }
+
     navigate('/admin/institute');
   }
 
@@ -36,10 +47,10 @@ const InstituteDetail = () => {
     id: 'institute',
     title: '신규 단체 추가',
     formFields: [
-      { id: 'docId', type: 'hidden', value: (instituteValue == null || !instituteValue.hasOwnProperty('docId')) ? '' : instituteValue['docId'] },
+      { id: 'id', type: 'hidden', value: (instituteValue == null || !instituteValue.hasOwnProperty('id')) ? '' : instituteValue['id'] },
       { id: 'title', type: 'text', label: '단체명', value: (instituteValue == null || !instituteValue.hasOwnProperty('title')) ? '' : instituteValue['title'] },
       { id: 'representative', type: 'member', label: '대표자', value: (instituteValue == null || !instituteValue.hasOwnProperty('name')) ? '' : instituteValue['name'] },
-      { id: 'representativeUid', type: 'hidden', value: (instituteValue == null  || !instituteValue.hasOwnProperty('uid')) ? '' : instituteValue['uid'] },
+      { id: 'representativeId', type: 'hidden', value: (instituteValue == null  || !instituteValue.hasOwnProperty('userId')) ? '' : instituteValue['userId'] },
       { id: 'location', type: 'text', label: '주소', value: (instituteValue == null  || !instituteValue.hasOwnProperty('location')) ? '' : instituteValue['location'] },
     ],
     validationSchema: validataionSchema,
