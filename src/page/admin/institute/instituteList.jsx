@@ -7,14 +7,13 @@ export default function InstituteList() {
   const [retrievedFlag, setRetrievedFlag] = useState(false);
   const [institutes, setInstitutes] = useState([]);
   const [pending, setPending] = useState(true);
-
-  const DbInstitutes = new FirestoreHelper.Institutes();
+  const [dbInstitutes] = useState(new FirestoreHelper.Institutes());
 
   useEffect(() => {
     async function retrieveData() {
       try {
         setRetrievedFlag(true);
-        const instituteList = await DbInstitutes.selectAll();
+        const instituteList = await dbInstitutes.selectAll();
         setInstitutes(instituteList);
         setPending(false);
       } catch (error) {
@@ -23,7 +22,7 @@ export default function InstituteList() {
     }
     
     if (retrievedFlag === false) retrieveData();
-  }, [retrievedFlag])
+  }, [retrievedFlag, dbInstitutes])
 
   const columns = [
     { name: 'id', selector: row => row.id, omit: true },
@@ -34,7 +33,7 @@ export default function InstituteList() {
   ];
 
   const onDelete = async (values) => {
-    await DbInstitutes.delete(values.id);
+    await dbInstitutes.delete(values.id);
     setRetrievedFlag(false);
   }
 

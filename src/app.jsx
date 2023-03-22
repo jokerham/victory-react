@@ -4,6 +4,7 @@ import { Layout } from './page/layout';
 import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList, MemberDetail } from "./page/admin/member";
+import { TournamentList } from "./page/admin/tournament";
 import { ErrorPage } from "./page/errorPage";
 import { useAddEventListeners } from "./utils/helpers/hookHelpers";
 import "./app.scss";
@@ -34,7 +35,7 @@ function App() {
           <Route path="*" element={<ErrorPage statusCode='404'/>} />
         </Route>
         <Route path='tournament/new' element={<></>} />
-        <Route path='tournament' element={<></>} />
+        <Route path='tournament' element={<TournamentList />} />
         <Route path='matching' element={<></>} />
         <Route path='matches' element={<></>} />
         <Route path='matches/result' element={<></>} />

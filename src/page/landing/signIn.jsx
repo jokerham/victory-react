@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import anime from 'animejs';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { set } from '../../store/reducers/userInfo';
 import { AuthenticationHelper, FirestoreHelper } from '../../utils/firebase';
 import { ReactComponent as Signinline } from './signInLine.svg';
@@ -12,11 +12,10 @@ import './signIn.css';
 
 export default function SignIn() {
   const initialValues = { email: '', password: '' };
-  const userInfo = useSelector((state) => state.userInfo.userInfo);
   const dispatch = useDispatch();
 
   const signInSchema = Yup.object().shape({
-    email: Yup.string().email().required('이메일은 필수 입력 항목입니다.'),
+    email: Yup.string().email('이메일 주소를 다시 확인해주세요.').required('이메일은 필수 입력 항목입니다.'),
     password: Yup.string().required('패스워드는 필수 입력 값입니다.').min(8, '패스워드는 최소 8자리를 입력해야 합니다.')
   });
 
@@ -80,8 +79,7 @@ export default function SignIn() {
 
   // Authentication
   const validate = (values) => {
-    let errors = {};
-    return errors;
+    return signInSchema.validate(values);
   }
 
   const navigate = useNavigate();

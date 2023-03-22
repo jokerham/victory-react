@@ -1,23 +1,17 @@
 import FirebaseBaseClass from './base';
-import Users from './users';
 
-
-export default class Institutes extends FirebaseBaseClass {
+export default class Tournaments extends FirebaseBaseClass {
 
   constructor() {
-    super('Institutes');
+    super('Tournaments');
   }
 
   async selectAll() {
-    const dbUsers = new Users();
     try {
       let records = [];
-      let tempRecords = await this.select([], [{ field: 'title' }]);
+      let tempRecords = await this.select([], [{ field: 'date', direction: 'Desc' }]);
       for (let i in tempRecords) {
         let record = tempRecords[i];
-        if (record.hasOwnProperty('userId') && record.userId !== null && record.userId !== '') {
-          record.user = await dbUsers.selectById(record.userId);
-        }
         records.push(record);
       }
       return records;

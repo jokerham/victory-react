@@ -12,7 +12,7 @@ export default class Users extends FirebaseBaseClass {
       let tempRecords = await this.select(
         [], [{ field: 'name' }]);
       tempRecords.forEach(async record => {
-        if (record.hasOwnProperty('instituteId') && record.instituteId != null && record.instituteId != '') {
+        if (record.hasOwnProperty('instituteId') && record.instituteId !== null && record.instituteId !== '') {
           const dbInstitute = new Institutes();
           record.user = await dbInstitute.selectById(record.instituteId);
         }
@@ -32,7 +32,7 @@ export default class Users extends FirebaseBaseClass {
         [{ field: 'name' }]);
       for (let i in tempRecords) {
         let record = tempRecords[i];
-        if (record.hasOwnProperty('instituteId') && record.instituteId != null && record.instituteId != '') {
+        if (record.hasOwnProperty('instituteId') && record.instituteId !== null && record.instituteId !== '') {
           const dbInstitute = new Institutes();
           record.institute = await dbInstitute.selectById(record.instituteId);
         }
