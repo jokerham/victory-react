@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import anime from 'animejs';
 import { Formik } from 'formik';
+import { ToastContainer, toast } from 'react-toastify';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2'
 import { useDispatch } from 'react-redux';
@@ -77,30 +78,45 @@ export default function SignIn() {
     });
   });
 
-  // Authentication
-  const validate = (values) => {
-    return signInSchema.validate(values);
-  }
-
   const navigate = useNavigate();
 
+  const toastHandler = (message) => {
+    const option = {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    }
+    toast.error(message, option);
+  }
+
   const submitForm = async (values) => {
-    // console.log(values);
-    AuthenticationHelper.authSignInWithEmailAndPassword(values.email, values.password)
-      .then(async (userCredential) => {
-        const dbUsers = new FirestoreHelper.Users();
-        const userInfo = await dbUsers.selectByUid(userCredential.user.uid);
-        dispatch(set(userInfo));
-        navigate('/admin/dashboard');
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: '로그인 오류',
-          text: error,
-          footer: '<a href="">패스워드 찾기</a>'
+    try {
+      await signInSchema.validate(values, { abortEarly: false });
+      AuthenticationHelper.authSignInWithEmailAndPassword(values.email, values.password)
+        .then(async (userCredential) => {
+          const dbUsers = new FirestoreHelper.Users();
+          const userInfo = await dbUsers.selectById(userCredential.user.uid);
+          dispatch(set(userInfo));
+          navigate('/admin/dashboard');
         })
-      });
+        .catch((error) => {
+          Swal.fire({
+            icon: 'error',
+            title: '로그인 오류',
+            text: error,
+            footer: '<a href="">패스워드 찾기</a>'
+          })
+        });
+    } catch (error) {
+      console.log(error);
+      error.errors.forEach((e) => {
+        toastHandler(e);
+      })
+    }
   }
 
   return (
@@ -116,7 +132,6 @@ export default function SignIn() {
             <div className="form">
               <Formik
                 initialValues={initialValues}
-                validate={validate}
                 onSubmit={submitForm}
               >
                 {(formik) => {
@@ -141,6 +156,7 @@ export default function SignIn() {
                   );
                   }}
               </Formik>
+              <ToastContainer />
             </div>
           </div>
         </div> 
