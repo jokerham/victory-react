@@ -204,8 +204,29 @@ const FormBody = (props) => {
 const FormBuilder = (props) => {
   const { config } = props;
 
+  const getFieldValue = (data, formField) => {
+    if (formField.value != null) {
+      return formField.value;
+    } else if (formField.dataProperty != null) {
+      let value = data;
+      for (let i = 0; i < formField.dataProperty.length; i++) {
+        if (data === null && typeof data === 'undefined') {
+          return '';
+        } else {
+          if(data.hasOwnProperty(formField.dataProperty[i])) {
+            value = data[formField.dataProperty[i]];
+          } else {
+            return '';
+          }
+        }
+      }
+      return value
+    }
+    return '';
+  }
+
   const initialValues = config.formFields.reduce((obj, field) => {
-    obj[field.id] = field.value;
+    obj[field.id] = getFieldValue(config.formData, field);
     return obj;
   }, {});
 

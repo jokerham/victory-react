@@ -15,15 +15,18 @@ export const DataTableComponent = (props) => {
   const pending = props.pending;
   const buttons = props.buttons;
   const valueOnSelectedRow = props.valueOnSelectedRow;
+  const selectableRowsSingle = props.selectableRowsSingle ?? true;
 
   const [editButtonDisabled, setEditButtonDisabled] = useState(true);
-  const [rowValue, setRowValue] = useState({});
+  const [rowValue, setRowValue] = useState(null);
 
   const handleSelectedRowChange = (state) => {
     setEditButtonDisabled(state.selectedCount === 0);
-    setRowValue(
-      state.selectedCount === 0 ?
-        '' : valueOnSelectedRow(state.selectedRows[0]));
+    const rowValue = 
+      state.selectedCount === 0 ? null :
+      state.selectedCount === 1 ? valueOnSelectedRow(state.selectedRows[0]) : 
+      state.selectedRows.map((row) => { return valueOnSelectedRow(row)});
+    setRowValue(rowValue);
   };
 
   const paginationComponentOptions = {
@@ -107,7 +110,7 @@ export const DataTableComponent = (props) => {
             selectableRows={true}
             selectableRowsHighlight={true}
             selectableRowsComponent={Checkbox}
-            selectableRowsSingle={true}
+            selectableRowsSingle={selectableRowsSingle}
             onSelectedRowsChange={handleSelectedRowChange}
             pagination
             paginationComponentOptions={paginationComponentOptions}
