@@ -41,7 +41,9 @@ export default function MemberList(props) {
 
   const onApprove = async (values) => {
     console.log(values);
-    await dbUsers.approveUser(values.id);
+    for (const value of values) {
+      await dbUsers.approveUser(value.id);
+    }
     setRetrievedFlag(false);
   }
   const title = (approved) ? '승인 회원 목록' : '미승인 회원 목록';
@@ -78,6 +80,7 @@ export default function MemberList(props) {
         data={members}
         pending={pending}
         buttons={buttons}
+        selectableRowsSingle={approved}
         valueOnSelectedRow={valueOnSelectedRow}
       />
     </main>

@@ -14,6 +14,14 @@ export default class FirebaseBaseClass {
     }
   }
 
+  async addBatch(values) {
+    for(const value of values) {
+      if (await this.existsWhere([{expression: 'name', value: value.name}]) === false) {
+        await this.add(value);
+      }
+    }
+  }
+
   async update(id, values) {
     try {
       if (await this.exists(id)) {
@@ -35,16 +43,20 @@ export default class FirebaseBaseClass {
     }
   }
 
+  async existsWhere(whereConditions) {
+    try {
+      const queryRef = this.queryWhereRef(whereConditions);
+      const snapshot = await getDocs(queryRef);
+      return snapshot.docs.length > 0;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async select(whereConditions, orderConditions) {
     try {
       let records = [];
-      let queryRef = query(this.collectionRef);
-      whereConditions.forEach(whereCondition => {
-        let condition = whereCondition.hasOwnProperty('condition') ? 
-          whereCondition.condition : '==';
-        queryRef = query(queryRef,
-          where(whereCondition.expression, condition, whereCondition.value));
-      });
+      let queryRef = this.queryWhereRef(whereConditions);
       orderConditions.forEach(orderCondition => {
         let direction = orderCondition.hasOwnProperty('direction') ? 
           orderCondition.direction : "asc";
@@ -82,5 +94,29 @@ export default class FirebaseBaseClass {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async deleteWhere(whereConditions) { 
+    try {
+      const queryRef = this.queryWhereRef(whereConditions);
+      let snapshot = await getDocs(queryRef);
+      console.log(snapshot.docs.length);
+      for (const doc of snapshot.docs) {
+        await deleteDoc(doc.ref);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  queryWhereRef(whereConditions) {
+    let queryRef = query(this.collectionRef);
+      whereConditions.forEach(whereCondition => {
+        let condition = whereCondition.hasOwnProperty('condition') ? 
+          whereCondition.condition : '==';
+        queryRef = query(queryRef,
+          where(whereCondition.expression, condition, whereCondition.value));
+      });
+    return queryRef;
   }
 }
