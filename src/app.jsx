@@ -5,6 +5,7 @@ import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList, MemberDetail } from "./page/admin/member";
 import { TournamentList } from "./page/admin/tournament";
+import { Migration } from './page/Migration';
 import { ErrorPage } from "./page/errorPage";
 import { useAddEventListeners } from "./utils/helpers/hookHelpers";
 import "./app.scss";
@@ -46,6 +47,7 @@ function App() {
         </Route>
         <Route path="*" element={<ErrorPage statusCode='404'/>} />
       </Route>
+      <Route path="/migration" element={<Migration />} />
       <Route path="/unauthorized" element={<ErrorPage statusCode='401'/>} />
       <Route path="*" element={<ErrorPage statusCode='404'/>} />
     </Routes>
