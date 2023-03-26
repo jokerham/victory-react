@@ -20,7 +20,7 @@ export default function Dashboard() {
         <div className="main-header__intro-wrapper">
           <div className="main-header__welcome">
             <div className="main-header__welcome-title text-light"><strong>{userName}</strong>님 안녕하세요.</div>
-            <div className="main-header__welcome-subtitle text-light">오늘은 {today.getFullYear()}년 {today.getMonth()}월 {today.getDate()}일 입니다.</div>
+            <div className="main-header__welcome-subtitle text-light">오늘은 {today.getFullYear()}년 {today.getMonth()+1}월 {today.getDate()}일 입니다.</div>
           </div>
           <div className="quickview">
             <div className="quickview__item">
