@@ -1,3 +1,4 @@
 import TournamentList from './tournamentList';
+import TournamentDetail from './tournamentDetail';
 
-export { TournamentList }
+export { TournamentList, TournamentDetail }

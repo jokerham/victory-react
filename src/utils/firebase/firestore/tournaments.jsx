@@ -9,7 +9,7 @@ export default class Tournaments extends FirebaseBaseClass {
   async selectAll() {
     try {
       let records = [];
-      let tempRecords = await this.select([], [{ field: 'date', direction: 'Desc' }]);
+      let tempRecords = await this.select([], [{ field: 'date', direction: 'asc' }]);
       for (let i in tempRecords) {
         let record = tempRecords[i];
         records.push(record);

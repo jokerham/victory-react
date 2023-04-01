@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Formik, Form, useFormikContext, Field } from 'formik';
+import { format } from 'date-fns';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { FaUndoAlt } from 'react-icons/fa';
@@ -128,6 +129,25 @@ const FormBody = (props) => {
       classNames.push('instituteSelecter');
       readOnly = true;
     }
+    if (formField.type === 'readonly') {
+      fieldType = 'text';
+      readOnly = true;
+    }
+
+    const onChange = (e) => {
+      handleChange(e);
+      if (formField.changeHandler != null) {
+        let values = formik.values;
+        values[e.target.id] = e.target.value;
+        values = formField.changeHandler(values);
+        for (const key in values) {
+          const value = values[key];
+          if (value.value !== formik.values[value.id]) {
+            formik.setFieldValue(value.id, value.value);
+          }
+        }
+      }
+    }
 
     let content;
     switch (fieldType) {
@@ -140,7 +160,7 @@ const FormBody = (props) => {
             readOnly={readOnly}
             className={classNames.join(' ')}
             value={fieldValue}
-            onChange={handleChange}
+            onChange={onChange}
           />
           break;
       case 'select':
@@ -160,10 +180,25 @@ const FormBody = (props) => {
               readOnly={readOnly}
               className={classNames.join(' ')}
               value={fieldValue}
-              onChange={handleChange}
+              onChange={onChange}
             >
               {options}
             </select>
+          </div>
+        break;
+      case 'date':
+        content = 
+          <div>
+            <label htmlFor={formField.id}>{formField.label}</label>
+            <Field
+              id={formField.id}
+              name={formField.id}
+              type={fieldType}
+              readOnly={readOnly}
+              className={classNames.join(' ')}
+              value={fieldValue}
+              onChange={onChange}
+            />
           </div>
         break;
       default:
@@ -177,7 +212,7 @@ const FormBody = (props) => {
               readOnly={readOnly}
               className={classNames.join(' ')}
               value={fieldValue}
-              onChange={handleChange}
+              onChange={onChange}
             />
           </div>
         break;
@@ -205,30 +240,38 @@ const FormBuilder = (props) => {
   const { config } = props;
 
   const getFieldValue = (data, formField) => {
+    let value = '';
     if (formField.value != null) {
-      return formField.value;
+      value = formField.value;
     } else if (formField.dataProperty != null) {
-      let value = data;
+      value = data;
       for (let i = 0; i < formField.dataProperty.length; i++) {
-        if (data === null && typeof data === 'undefined') {
-          return '';
+        if (data === null || typeof data === 'undefined') {
+          value = '';
         } else {
           if(data.hasOwnProperty(formField.dataProperty[i])) {
             value = data[formField.dataProperty[i]];
-          } else {
-            return '';
           }
         }
       }
-      return value
     }
-    return '';
+
+    if (value === '' && formField.type === 'date') {
+      value = new Date();
+    }
+
+    if (value === '' && formField.type === 'number') {
+      value = 0;
+    }
+    return value;
   }
 
   const initialValues = config.formFields.reduce((obj, field) => {
     obj[field.id] = getFieldValue(config.formData, field);
     return obj;
   }, {});
+
+  console.log(initialValues)
 
   const toastHandler = (message) => {
     const option = {
@@ -256,7 +299,7 @@ const FormBuilder = (props) => {
         toastHandler(e);
       })
     }
-  })
+  });
 
   return (
     <div className="page-body">
@@ -266,16 +309,16 @@ const FormBuilder = (props) => {
             {config.title}
           </div>
         </div>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-        >
-          <Form id={config.id}>
-            <FormBody config={config} />
-            <FormButtons config={config} />
-          </Form>
-        </Formik>
-        <ToastContainer />
+          <Formik
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+          >
+            <Form id={config.id}>
+              <FormBody config={config} />
+              <FormButtons config={config} />
+            </Form>
+          </Formik>
+          <ToastContainer />
       </div>
     </div>
   )

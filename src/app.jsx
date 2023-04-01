@@ -4,7 +4,7 @@ import { Layout } from './page/layout';
 import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList, MemberDetail } from "./page/admin/member";
-import { TournamentList } from "./page/admin/tournament";
+import { TournamentList, TournamentDetail } from "./page/admin/tournament";
 import { Migration } from './page/Migration';
 import { ErrorPage } from "./page/errorPage";
 import { useAddEventListeners } from "./utils/helpers/hookHelpers";
@@ -26,8 +26,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/admin/*" element={<Layout />} >
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="institute/new" element={<InstituteDetail key="new"/>} />
-        <Route path="institute/edit" element={<InstituteDetail key="edit"/>} />
+        <Route path="institute/new" element={<InstituteDetail key="new" />} />
+        <Route path="institute/edit" element={<InstituteDetail key="edit" />} />
         <Route path="institute" element={<InstituteList />} />
         <Route path="member/*">
           <Route path="edit" element={<MemberDetail />} />
@@ -35,7 +35,8 @@ function App() {
           <Route path="unapproved" element={<MemberList approved={false} key={2}/>} />
           <Route path="*" element={<ErrorPage statusCode='404'/>} />
         </Route>
-        <Route path='tournament/new' element={<></>} />
+        <Route path='tournament/new' element={<TournamentDetail key="new" />} />
+        <Route path='tournament/edit' element={<TournamentDetail key="edit" />} />
         <Route path='tournament' element={<TournamentList />} />
         <Route path='matching' element={<></>} />
         <Route path='matches' element={<></>} />

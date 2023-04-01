@@ -29,6 +29,11 @@ export default function TournamentList(props) {
     { name: '대회명', selector: row => row.title, sortable: true, grow: 1 },
     { name: '일정', selector: row => row.date, sortable: true, grow: 1 },
     { name: '장소', selector: row => row.location, sortable: true, grow: 1 },
+    { name: '체급(최소)', selector: row => row.minWeight, omit: true },
+    { name: '채급(최대)', selector: row => row.maxWeight, omit: true },
+    { name: '체금 증감 차이', selector: row => row.diffWeight, omit: true },
+    { name: '지원 가능 체급', selector: row => row.weight, omit: true },
+    { name: '경기장 수', selector: row => row.rings, omit: true },
   ];
 
   const onDelete = async (values) => {
@@ -37,17 +42,24 @@ export default function TournamentList(props) {
   }
 
   const buttons = {
-    edit: '/admin/member/edit',
+    add: '/admin/tournament/new',
+    edit: '/admin/tournament/edit',
     delete: onDelete
   }
 
   const valueOnSelectedRow = (selectedRow) => {
-    return {
+    const value = {
       id: selectedRow.id,
       title: selectedRow.title,
       date: selectedRow.date,
       location: selectedRow.location,
+      minWeight: selectedRow.minWeight,
+      maxWeight: selectedRow.maxWeight,
+      diffWeight: selectedRow.diffWeight,
+      weight: selectedRow.weight,
+      rings: selectedRow.rings,
     }
+    return value;
   }
 
   return (

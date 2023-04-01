@@ -80,8 +80,12 @@ export default class FirebaseBaseClass {
       const docRef = doc(this.collectionRef, id);
       const snapshot = await getDoc(docRef);
       const record = snapshot.data();
-      record.id = id;
-      return record;
+      if (record !== null && typeof record !== 'undefined') {
+        record.id = id;
+        return record;
+      } else {
+        return null;
+      }
     } catch (error) {
       console.log(error);
     }
