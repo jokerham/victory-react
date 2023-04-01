@@ -74,6 +74,7 @@ export const DataTableComponent = (props) => {
           const onClickEventHandler = (e) => {
             const callback = buttons[presetButton.name];
             callback(rowValue);
+            setEditButtonDisabled(true);
           }
           buttonComponents.push(
             <Button 
