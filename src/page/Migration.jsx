@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { FirestoreHelper } from "../utils/firebase"
 
 const Migration = () => {
-  const dbUsers = new FirestoreHelper.Users();
-  //const dbInstitutes = new FirestoreHelper.Institutes();
 
   // const names = [
   //   "강민지", "이승현", "박지훈", "최영재", "정해인", "강소라", "송중기", "한지민", "윤시윤", "신예은",
@@ -18,7 +16,7 @@ const Migration = () => {
   //   "김민정", "김선아"
   // ];
 
-  const names = ["김수현",  "이도현",  "홍지민",  "조용우",  "박정민",  "유진호",  "최예진",  "장승훈",  "김태호",  "서민영"];
+  //const names = ["김수현",  "이도현",  "홍지민",  "조용우",  "박정민",  "유진호",  "최예진",  "장승훈",  "김태호",  "서민영"];
 
   // const emails = [
   //   "johndoe@example.com",
@@ -110,18 +108,18 @@ const Migration = () => {
   //   "andrewnguyen@example.com",
   // ];
 
-  const emails = [
-    "christinachang@example.com",
-    "jacobrodriguez@example.com",
-    "nataliemiller@example.com",
-    "patrickramirez@example.com",
-    "gracebaker@example.com",
-    "migueltorres@example.com",
-    "madisonbell@example.com",
-    "ethanbrown@example.com",
-    "sofiaflores@example.com",
-    "dylanrogers@example.com"
-  ];
+  // const emails = [
+  //   "christinachang@example.com",
+  //   "jacobrodriguez@example.com",
+  //   "nataliemiller@example.com",
+  //   "patrickramirez@example.com",
+  //   "gracebaker@example.com",
+  //   "migueltorres@example.com",
+  //   "madisonbell@example.com",
+  //   "ethanbrown@example.com",
+  //   "sofiaflores@example.com",
+  //   "dylanrogers@example.com"
+  // ];
 
   // const contacts = [
   //   "010-1234-5678",
@@ -201,28 +199,35 @@ const Migration = () => {
   //   "010-2468-9140",
   // ];
 
-  const contacts = ["010-3141-5926",  "010-2718-2818",  "010-1818-8716",  "010-3698-0716",  "010-4221-4006",
-                    "010-7737-3730",  "010-9442-1912",  "010-1312-6649",  "010-3902-8401",  "010-2987-8724"];
+  // const contacts = ["010-3141-5926",  "010-2718-2818",  "010-1818-8716",  "010-3698-0716",  "010-4221-4006",
+  //                   "010-7737-3730",  "010-9442-1912",  "010-1312-6649",  "010-3902-8401",  "010-2987-8724"];
+
+  //const dbUsers = new FirestoreHelper.Users();
+  //const dbInstitutes = new FirestoreHelper.Institutes();
+  //const dbRegistrations = new FirestoreHelper.Registrations();
 
   useEffect(() => {
-    const createData = () => {
-      let data = [];
-      for (let i=0; i<names.length && i<emails.length && i<contacts.length; i++) {
-        data.push({
-          approved: false,
-          name: names[i],
-          email: emails[i],
-          contact: contacts[i],
-        })
-      }
-      return data;
-    }
+    // const createData = () => {
+    //   let data = [];
+    //   for (let i=0; i<names.length && i<emails.length && i<contacts.length; i++) {
+    //     data.push({
+    //       approved: false,
+    //       name: names[i],
+    //       email: emails[i],
+    //       contact: contacts[i],
+    //     })
+    //   }
+    //   return data;
+    // }
 
-    dbUsers.addBatch(createData());
+    // dbUsers.addBatch(createData());
 
     // dbUsers.deleteWhere([
     //   {expression: 'type', value: '선수'}
     // ]);
+
+    //dbUsers.setRandomWeight();
+    //dbRegistrations.registerUsersToTournament('aTPuYXOcm9NqSLHAutNg');
   })
 
   return (

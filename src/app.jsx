@@ -4,7 +4,7 @@ import { Layout } from './page/layout';
 import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList, MemberDetail } from "./page/admin/member";
-import { TournamentList, TournamentDetail } from "./page/admin/tournament";
+import { TournamentList, TournamentDetail, ApplicableMatchList, ApplicableMatchDetail } from "./page/admin/tournament";
 import { Migration } from './page/Migration';
 import { ErrorPage } from "./page/errorPage";
 import { useAddEventListeners } from "./utils/helpers/hookHelpers";
@@ -33,20 +33,26 @@ function App() {
           <Route path="edit" element={<MemberDetail />} />
           <Route path="approved" element={<MemberList approved={true} key={1}/>} />
           <Route path="unapproved" element={<MemberList approved={false} key={2}/>} />
-          <Route path="*" element={<ErrorPage statusCode='404'/>} />
         </Route>
-        <Route path='tournament/new' element={<TournamentDetail key="new" />} />
-        <Route path='tournament/edit' element={<TournamentDetail key="edit" />} />
-        <Route path='tournament' element={<TournamentList />} />
+        <Route path='tournament/*'>
+          <Route path='' element={<TournamentList />} />
+          <Route path='new' element={<TournamentDetail key="new" />} />
+          <Route path='edit' element={<TournamentDetail key="edit" />} />
+          <Route path=':id/*'>
+            <Route path='applicableMatches/*'>
+              <Route path='' element={<ApplicableMatchList />} />
+              <Route path='new' element={<ApplicableMatchDetail key="new"/>} />
+              <Route path='edit' element={<ApplicableMatchDetail key="edit"/>} />
+            </Route>
+          </Route>
+        </Route>
         <Route path='matching' element={<></>} />
         <Route path='matches' element={<></>} />
         <Route path='matches/result' element={<></>} />
         <Route path="awards/*">
           <Route path="tournament" element={<></>} />
           <Route path="member" element={<></>} />
-          <Route path="*" element={<ErrorPage statusCode='404'/>} />
         </Route>
-        <Route path="*" element={<ErrorPage statusCode='404'/>} />
       </Route>
       <Route path="/migration" element={<Migration />} />
       <Route path="/unauthorized" element={<ErrorPage statusCode='401'/>} />

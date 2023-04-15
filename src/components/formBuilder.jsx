@@ -113,7 +113,7 @@ const FormBody = (props) => {
     let classNames = [];
     let fieldType = formField.type;
     let readOnly = false;
-    let fieldValue = (values !== undefined && formField.id in values) ? values[formField.id] : '';
+    let fieldValue = (values !== undefined && formField.id in values && values[formField.id] !== null) ? values[formField.id] : '';
 
     if (formField.type === 'contact') {
       fieldType = 'text';
@@ -270,9 +270,7 @@ const FormBuilder = (props) => {
     return obj;
   }, {});
 
-  console.log(initialValues)
-
-  const toastHandler = (message) => {
+  const toastHandler = (message, toastType = 'error') => {
     const option = {
       position: 'top-right',
       autoClose: 5000,
@@ -282,7 +280,23 @@ const FormBuilder = (props) => {
       draggable: true,
       progress: undefined,
     }
-    toast.error(message, option);
+
+    switch(toastType) {
+      case 'error':
+        toast.error(message, option);
+        break;
+      case 'success':
+        toast.success(message, option);
+        break;
+      case 'info':
+        toast.info(message, option);
+        break;
+      case 'warning':
+        toast.warning(message, option);
+        break;
+      default:
+        break;
+    }
   }
 
   const onSubmit = (async (values) => {
@@ -292,6 +306,7 @@ const FormBuilder = (props) => {
 
     try {
       await config.validationSchema.validateSync(values, {abortEarly: false});
+      toastHandler('정상적으로 저장되었습니다.', 'success');
       handler(values);
     } catch (error) {
       error.errors.forEach((e) => {

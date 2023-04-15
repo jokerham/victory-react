@@ -68,4 +68,22 @@ export default class Users extends FirebaseBaseClass {
       console.log(error);
     }
   }
+
+  async setRandomWeight() {
+    const mean = 50;
+    const standardDeviation = 5;
+    try {
+      let users = await this.selectAll();
+      users.forEach(async user => {
+        const u1 = Math.random();
+        const u2 = Math.random();
+        const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+        const weight = mean + z0 * standardDeviation;
+        user.weight = weight;
+        await this.update(user.id, user);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

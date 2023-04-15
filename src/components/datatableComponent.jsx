@@ -16,6 +16,7 @@ export const DataTableComponent = (props) => {
   const buttons = props.buttons;
   const valueOnSelectedRow = props.valueOnSelectedRow;
   const selectableRowsSingle = props.selectableRowsSingle ?? true;
+  const customButtons = props.customButtons ?? null;
 
   const [editButtonDisabled, setEditButtonDisabled] = useState(true);
   const [rowValue, setRowValue] = useState(null);
@@ -44,7 +45,8 @@ export const DataTableComponent = (props) => {
     );
   }
   
-  const DataTableButtons = () => {
+  const DataTableButtons = (props) => {
+    const customButtons = props.customButtons;
     let buttonComponents = [];
 
     const possiblePresetButtons = [
@@ -90,6 +92,38 @@ export const DataTableComponent = (props) => {
       }
     })
 
+    if (customButtons != null) {
+      customButtons.forEach((customButton) => {
+        if (typeof customButton.onClickHandler === 'string') {
+          const pathname = customButton.onClickHandler ;
+          const link = { pathname: pathname };
+          buttonComponents.push(
+            <Link to={link} key={customButton.name} >
+              <Button variant="contained" startIcon={customButton.icon}>
+                {customButton.label}
+              </Button>
+            </Link>
+          );
+        } else {
+          const onClickEventHandler = (e) => {
+            const callback = customButton.onClickHandler;
+            callback(rowValue);
+            setEditButtonDisabled(true);
+          }
+          buttonComponents.push(
+            <Button 
+              key={customButton.name} 
+              variant="contained" 
+              startIcon={customButton.icon} 
+              disabled={customButton.toggleOnSelect && editButtonDisabled}
+              onClick={onClickEventHandler}>
+              {customButton.label}
+            </Button>
+          );
+        }
+      });
+    }
+
     return (
       <div className="page-body__card_buttons">
         {buttonComponents}
@@ -121,7 +155,7 @@ export const DataTableComponent = (props) => {
             }
           />
         </div>
-        <DataTableButtons />
+        <DataTableButtons customButtons={customButtons}/>
       </div>
     </div>
   );
