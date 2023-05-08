@@ -5,6 +5,7 @@ import { Button, Checkbox } from '@mui/material';
 import ReactLoading from 'react-loading';
 import { BsCheckCircle } from 'react-icons/bs';
 import { IoAdd } from 'react-icons/io5';
+import { FiCopy } from 'react-icons/fi'
 import { VscEdit } from 'react-icons/vsc';
 import { RiDeleteBinLine } from 'react-icons/ri';
 
@@ -52,6 +53,7 @@ export const DataTableComponent = (props) => {
     const possiblePresetButtons = [
       { name: 'add', icon: <IoAdd />, label: '추가', toggleOnSelect: false},
       { name: 'edit', icon: <VscEdit />, label: '수정', toggleOnSelect: true},
+      { name: 'copy', icon: <FiCopy />, label: '복사', toggleOnSelect: true},
       { name: 'delete', icon: <RiDeleteBinLine />, label: '삭제', toggleOnSelect: true},
       { name: 'approve', icon: <BsCheckCircle />, label: '승인', toggleOnSelect: true},
     ];
@@ -61,7 +63,8 @@ export const DataTableComponent = (props) => {
         if (typeof buttons[presetButton.name] === 'string') {
           const pathname = buttons[presetButton.name];
           const link = { pathname: pathname };
-          const state = (editButtonDisabled) ? {} : rowValue;
+          const state = (editButtonDisabled) ? {} : JSON.parse(JSON.stringify(rowValue));
+          if (presetButton.name === 'copy') { state.id = ''; }
           buttonComponents.push(
             <Link to={link} state={state} key={presetButton.name} >
               <Button 

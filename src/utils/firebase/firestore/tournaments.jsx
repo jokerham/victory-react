@@ -1,4 +1,5 @@
 import FirebaseBaseClass from './base';
+import ScheduledMatches from './scheduledMatches';
 
 export default class Tournaments extends FirebaseBaseClass {
 
@@ -29,6 +30,24 @@ export default class Tournaments extends FirebaseBaseClass {
           records.push(record);
         }
       })
+      return records;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async selectByUnscheduled() {
+    try {
+      let scheduledMatches = new ScheduledMatches();
+      let records = [];
+      let tempRecords = await this.selectAll();
+      for (let i in tempRecords) {
+        let record = tempRecords[i];
+        let scheduleMatched = await scheduledMatches.existsWhere([{expression: 'tournamentId', value: record.id}]);
+        if (scheduleMatched === false) {
+          records.push(record);
+        }
+      };
       return records;
     } catch (error) {
       console.log(error);

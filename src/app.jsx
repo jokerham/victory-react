@@ -4,7 +4,7 @@ import { Layout } from './page/layout';
 import { Dashboard } from './page/admin/dashboard';
 import { InstituteList, InstituteDetail } from './page/admin/institute';
 import { MemberList, MemberDetail } from "./page/admin/member";
-import { TournamentList, TournamentDetail, ApplicableMatchList, ApplicableMatchDetail } from "./page/admin/tournament";
+import { TournamentList, TournamentDetail, ApplicableMatchList, ApplicableMatchDetail, ScheduleMatching, Register } from "./page/admin/tournament";
 import { Migration } from './page/Migration';
 import { ErrorPage } from "./page/errorPage";
 import { useAddEventListeners } from "./utils/helpers/hookHelpers";
@@ -43,10 +43,12 @@ function App() {
               <Route path='' element={<ApplicableMatchList />} />
               <Route path='new' element={<ApplicableMatchDetail key="new"/>} />
               <Route path='edit' element={<ApplicableMatchDetail key="edit"/>} />
+              <Route path='copy' element={<ApplicableMatchDetail key="copy"/>} />
             </Route>
+            <Route path='register' element={<Register key="edit" />} />
           </Route>
         </Route>
-        <Route path='matching' element={<></>} />
+        <Route path='scheduleMatching' element={<ScheduleMatching />} />
         <Route path='matches' element={<></>} />
         <Route path='matches/result' element={<></>} />
         <Route path="awards/*">

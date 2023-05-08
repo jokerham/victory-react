@@ -1,4 +1,5 @@
 import FirebaseBaseClass from './base';
+import Registrations from './registrations';
 
 export default class ApplicableMatches extends FirebaseBaseClass {
 
@@ -11,9 +12,10 @@ export default class ApplicableMatches extends FirebaseBaseClass {
       let records = [];
       let tempRecords = await this.select(
         [{expression: 'tournamentId', value: id}], 
-        [{field: 'weight', direction: 'asc' }]);
-      for (let i in tempRecords) {
-        let record = tempRecords[i];
+        [{field: 'matchType', direction: 'asc' },{field: 'weight', direction: 'asc' }]);
+      let dbRegistrations = new Registrations();
+      for (let record of tempRecords) {
+        record.users = await dbRegistrations.selectAll(record.id);
         records.push(record);
       }
       return records;

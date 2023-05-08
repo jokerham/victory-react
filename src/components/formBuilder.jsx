@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, useFormikContext, Field } from 'formik';
 import { ToastContainer, toast } from 'react-toastify';
 import { Button } from '@mui/material';
@@ -6,48 +7,59 @@ import { FaUndoAlt } from 'react-icons/fa';
 import { RiSave3Fill } from 'react-icons/ri';
 import { IoSearch } from 'react-icons/io5';
 import MemberSelecterModal from '../components/memberSelecterModal';
+import PageBodyCard from '../components/pageBodyCard';
 import InstituteSelecterModal from '../components/instituteSelecterModal';
 import { useAddEventListeners } from '../utils/helpers/hookHelpers';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
+
+const FormButton = (props) => {
+  const { key, icon, text, handler } = props
+  return (
+    <Button 
+      variant="contained" 
+      id={key} 
+      startIcon={icon}
+      onClick={handler}
+    >
+      {text}
+    </Button>
+  )
+}
 
 const FormButtons = (props) => {
   const { config } = props;
   const formik = useFormikContext();
   const navigate = useNavigate();
-  let icon = <></>;
-  let text = "";
+  let buttonComponents = []
 
   if (config.submitHandler != null) {
-    icon = <RiSave3Fill />;
-    text = "저장";
-  } else if (config.searchHandler != null) {
-    icon = <IoSearch />
-    text = "검색";
+    buttonComponents.push(
+      <FormButton key="submitButton" icon={<RiSave3Fill />} text="저장" handler={formik.submitForm}/>);
+  } 
+  if (config.searchHandler != null) {
+    buttonComponents.push(
+      <FormButton key="searchButton" icon={<IoSearch />} text="검색" handler={formik.submitForm}/>);
   }
-  
+
   const handleCancelClick = () => {
     navigate(-1)
   }
 
+  if (config.cancelEnabled) {
+    buttonComponents.push(
+      <FormButton key="cancelButton" icon={<FaUndoAlt />} text="취소" handler={handleCancelClick}/>);
+  }
+
+  if (config.customButtons != null) {
+    for (const button of config.customButtons) {
+      buttonComponents.push(
+        <FormButton key={button.key} icon={button.icon} text={button.text} handler={button.handler(formik.values)}/>);
+    }
+  }
+
   return (
     <div className='form_buttons'>
-      <Button 
-        variant="contained" 
-        id="form_button_submit" 
-        startIcon={icon}
-        onClick={formik.submitForm}
-      >
-        {text}
-      </Button>
-      <Button 
-        variant="contained" 
-        id="form_button_submit" 
-        startIcon={<FaUndoAlt />}
-        onClick={handleCancelClick}
-      >
-        취소
-      </Button>
+      {buttonComponents}
     </div>
   )
 }
@@ -113,7 +125,7 @@ const FormBody = (props) => {
     let classNames = [];
     let fieldType = formField.type;
     let readOnly = false;
-    let fieldValue = (values !== undefined && formField.id in values && values[formField.id] !== null) ? values[formField.id] : '';
+    let fieldValue = (values !== undefined && formField.id in values && values[formField.id].length > 0) ? values[formField.id] : fieldType === 'number' ? '0' : ''; //  
 
     if (formField.type === 'contact') {
       fieldType = 'text';
@@ -134,7 +146,11 @@ const FormBody = (props) => {
     }
 
     const onChange = (e) => {
-      handleChange(e);
+      handleChange(e)
+      setFieldForOnChangeHandler(e);
+    }
+
+    const setFieldForOnChangeHandler = (e) => {
       if (formField.changeHandler != null) {
         let values = formik.values;
         values[e.target.id] = e.target.value;
@@ -148,7 +164,7 @@ const FormBody = (props) => {
       }
     }
 
-    let content;
+    let content = ''
     switch (fieldType) {
       case 'hidden': 
         content = 
@@ -163,12 +179,14 @@ const FormBody = (props) => {
           />
           break;
       case 'select':
-        const options = formField.option.map((option) => (
-          <option key={option} value={option}>{option}</option>
-        ));
-        options.unshift(
-          <option key='empty' value=''></option>
-        )
+        const options = [<option key='' value=''></option>]
+        formField.option.forEach((option) => {
+          if (typeof option === "string") {
+            options.push(<option key={option} value={option}>{option}</option>);
+          } else {
+            options.push(<option key={option.id} value={option.id}>{option.value}</option>);
+          }
+        });
         content = 
           <div>
             <label htmlFor={formField.id}>{formField.label}</label>
@@ -185,14 +203,14 @@ const FormBody = (props) => {
             </select>
           </div>
         break;
-      case 'date':
+      case "number":
         content = 
           <div>
             <label htmlFor={formField.id}>{formField.label}</label>
             <Field
               id={formField.id}
               name={formField.id}
-              type={fieldType}
+              type='text'
               readOnly={readOnly}
               className={classNames.join(' ')}
               value={fieldValue}
@@ -316,25 +334,23 @@ const FormBuilder = (props) => {
   });
 
   return (
-    <div className="page-body">
-      <div className="page-body__card">
-        <div className="form_header">
-          <div className="form_header__title">
-            {config.title}
-          </div>
+    <PageBodyCard>
+      <div className="form_header">
+        <div className="form_header__title">
+          {config.title}
         </div>
-          <Formik
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-          >
-            <Form id={config.id}>
-              <FormBody config={config} />
-              <FormButtons config={config} />
-            </Form>
-          </Formik>
-          <ToastContainer />
       </div>
-    </div>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+      >
+        <Form id={config.id}>
+          <FormBody config={config} />
+          <FormButtons config={config} />
+        </Form>
+      </Formik>
+      <ToastContainer />
+    </PageBodyCard>
   )
 }
 

@@ -42,8 +42,6 @@ $width-sidenav: 240px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
-// Resets
-
 html, body {
   height: 100vh;
   margin: 0;
@@ -84,6 +82,10 @@ code {
   &--align-h-center {
     justify-content: center;
   }
+}
+
+.hidden {
+  display: none !important;
 }
 
 // Establish dashboard css grid layout - mobile
@@ -506,6 +508,7 @@ code {
   &__card {
     border-radius: 10px;
     background-color: white;
+    margin-top: 20px;
     padding: 10px;
     position: relative;
 
@@ -1122,5 +1125,5 @@ code {
 }
 }
 
-// Referenㅅce
+// Reference
 // - https://blog.greenroots.info/3-quick-ways-to-add-fonts-to-your-react-app

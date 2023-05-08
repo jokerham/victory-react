@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FirestoreHelper } from '../../../utils/firebase';
 import { DataTableComponent } from '../../../components/datatableComponent';
 import { FcInspection } from 'react-icons/fc';
+import { IoPersonAdd } from 'react-icons/io5';
 import { FaUndoAlt } from 'react-icons/fa';
 
 export default function ApplicableMatcheList() {
@@ -45,11 +46,16 @@ export default function ApplicableMatcheList() {
   
   const columns = [
     { name: 'id', selector: row => row.id, omit: true },
+    { name: '구분', selector: row => row.matchType, sortable: true, grow: 1 },
     { name: '체급', selector: row => row.weight, sortable: true, grow: 1 },
-    { name: '대전종류', selector: row => row.matchType, sortable: true, grow: 1 },
+    { name: '대전종류', selector: row => row.tournamentType, sortable: true, grow: 1 },
+    { name: '경기시간', selector: row => row.duration, sortable: true, grow: 1 },
+    { name: '라운드 수', selector: row => row.rounds, sortable: true, grow: 1 },
+    { name: '참가자수', selector: row => row.users.length, sortable: true, grow: 1 },
   ];
 
   const onDelete = async (values) => {
+    console.log(values)
     await dbApplicableMatches.delete(values.id);
     setRetrievedFlag(false);
   }
@@ -57,19 +63,32 @@ export default function ApplicableMatcheList() {
   const buttons = {
     add: '/admin/tournament/' + tournamentId + '/applicableMatches/new',
     edit: '/admin/tournament/' + tournamentId + '/applicableMatches/edit',
+    copy: '/admin/tournament/' + tournamentId + '/applicableMatches/copy',
     delete: onDelete,
   }
 
   const valueOnSelectedRow = (selectedRow) => {
     const value = {
       id: selectedRow.id,
-      weight: selectedRow.weight,
       matchType: selectedRow.matchType,
+      weight: selectedRow.weight,
+      tournamentType: selectedRow.tournamentType,
+      rounds: selectedRow.rounds,
+      duration: selectedRow.duration,
     }
     return value;
   }
 
+  const registerUser = async (values) => {
+  }
+
   const customButtons = [{
+    name: 'register',
+    label: '참가신청',
+    icon: <IoPersonAdd />,
+    toggleOnSelect: false,
+    onClickHandler: registerUser
+  },{
     name: 'cancel',
     label: '취소',
     icon: <FaUndoAlt />,
@@ -86,7 +105,7 @@ export default function ApplicableMatcheList() {
         </div>
       </div>
       <DataTableComponent 
-        title='대회 목록 조회'
+        title='대전 목록 조회'
         columns={columns}
         data={applicableMatches}
         pending={pending}

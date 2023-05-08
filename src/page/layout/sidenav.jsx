@@ -111,7 +111,7 @@ export default function LayoutSidenav(props) {
             <ul className="subList subList--hidden">
               <Link to="/admin/tournament/new"><li className="subList__item">신규 대회 등록</li></Link>
               <Link to="/admin/tournament"><li className="subList__item">대회 목록 조회</li></Link>
-              <Link to="/admin/matching"><li className="subList__item">대전 매칭</li></Link>
+              <Link to="/admin/scheduleMatching"><li className="subList__item">대전 매칭</li></Link>
               <Link to="/admin/matches"><li className="subList__item">대전 목록 조회</li></Link>
               <Link to="/admin/matches/result"><li className="subList__item">대전 결과 기록</li></Link>
             </ul>
