@@ -19,8 +19,6 @@ const ApplicableMatchDetail = () => {
     duration: '',
     rounds: '0'} : location.state
 
-  console.log(location)
-
   useEffect(() => {
     async function getTournamentInfo() {
       const dbTournaments = new FirestoreHelper.Tournaments();
